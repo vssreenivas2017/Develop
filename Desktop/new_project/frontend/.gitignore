@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env.local
+.env
+.DS_Store
+*.log
+.vscode/
+dist/
+build/
+*.swp
+*.swo
