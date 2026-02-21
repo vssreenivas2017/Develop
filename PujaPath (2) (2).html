@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#7c2d12"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="PujaPath"/>
+<title>PujaPath 🕉️</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --saffron:#c2410c;--saffron-dark:#9a3412;--saffron-deep:#7c2d12;
+  --gold:#f59e0b;--gold-light:#fef3c7;--gold-pale:#fdf8f0;
+  --purple:#7c3aed;--purple-dark:#4a1d96;
+  --blue:#2563eb;--blue-dark:#1e3a5f;
+  --green:#16a34a;--green-dark:#14532d;
+  --red:#dc2626;--red-bg:#fee2e2;
+  --text:#1c1917;--text-muted:#6b7280;--text-light:#92400e;
+  --border:#fed7aa;--bg:#fdf8f0;
+}
+html,body{height:100%;overscroll-behavior:none;}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--text);}
+#app{max-width:480px;margin:0 auto;min-height:100vh;background:linear-gradient(160deg,#fdf8f0,#fff9f0,#fef5e7);box-shadow:0 0 40px rgba(0,0,0,0.15);position:relative;display:flex;flex-direction:column;}
+button{font-family:Georgia,serif;cursor:pointer;border:none;background:none;}
+input,select,textarea{font-family:Georgia,serif;}
+::-webkit-scrollbar{width:0;height:0;}
+.hide{display:none!important;}
+
+/* HEADER */
+#header{background:linear-gradient(135deg,#7c2d12,#9a3412,#c2410c);padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(124,45,18,0.4);position:sticky;top:0;z-index:100;}
+.logo-wrap{display:flex;align-items:center;gap:10;}
+.logo-icon{background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:14px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.logo-title{color:#fff;font-weight:bold;font-size:20px;letter-spacing:1px;}
+.logo-sub{color:#fcd9b5;font-size:9px;letter-spacing:3px;text-transform:uppercase;}
+#btn-back{background:rgba(255,255,255,0.2);color:#fff;padding:6px 12px;border-radius:10px;font-size:12px;font-weight:bold;}
+
+/* TABS */
+#tabs{display:flex;background:#fff;border-bottom:2px solid #fed7aa;position:sticky;top:64px;z-index:99;}
+.tab-btn{flex:1;padding:8px 2px 6px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;border-bottom:3px solid transparent;transition:border-color 0.2s;}
+.tab-btn.active{border-bottom-color:#c2410c;}
+.tab-btn .tab-icon{font-size:17px;}
+.tab-btn .tab-label{font-size:9px;color:#92400e;font-weight:normal;font-family:Georgia,serif;}
+.tab-btn.active .tab-label{color:#c2410c;font-weight:bold;}
+
+/* CONTENT */
+#content{flex:1;padding:16px 16px 100px;overflow-y:auto;}
+
+/* CARDS */
+.hero-card{border-radius:20px;padding:22px 20px;text-align:center;margin-bottom:18px;}
+.hero-icon{font-size:44px;margin-bottom:6px;}
+.hero-title{color:#fff;font-size:22px;font-weight:bold;}
+.hero-sub{font-size:12px;margin-top:4px;}
+
+.puja-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 3px 15px rgba(0,0,0,0.07);border:1px solid #fed7aa;cursor:pointer;display:flex;align-items:center;gap:14;transition:transform 0.15s,box-shadow 0.15s;}
+.puja-card:active{transform:scale(0.98);}
+.puja-icon-wrap{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;border:2px solid #fbbf24;}
+.puja-name{font-weight:bold;color:#7c2d12;font-size:14px;}
+.puja-sub{color:#b45309;font-size:11px;margin-top:1px;}
+.puja-desc{color:#6b7280;font-size:11px;margin-top:2px;}
+
+/* REGION PILLS */
+.region-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
+.pill{padding:5px 12px;border-radius:20px;border:1.5px solid #fed7aa;background:#fff;color:#92400e;font-size:11px;cursor:pointer;font-weight:normal;font-family:Georgia,serif;transition:all 0.15s;}
+.pill.active,.pill:active{background:#c2410c;border-color:#c2410c;color:#fff;font-weight:bold;}
+
+/* SAMAGRI */
+.samagri-item{background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:9px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid #d1d5db;border:1.5px solid #e5e7eb;cursor:pointer;transition:all 0.2s;}
+.samagri-item.checked{background:#f0fdf4;border-color:#86efac;border-left-color:#16a34a;}
+.samagri-item.mandatory{border-left-color:#dc2626;}
+.samagri-item.mandatory.checked{border-left-color:#16a34a;}
+.item-emoji-wrap{position:relative;flex-shrink:0;}
+.item-emoji{width:44px;height:44px;border-radius:12px;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-size:22px;border:1.5px solid #e5e7eb;}
+.item-emoji.mandatory-bg{background:linear-gradient(135deg,#fee2e2,#fecaca);border-color:#fca5a5;}
+.item-emoji.checked-bg{background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-color:#86efac;}
+.item-check{position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:bold;border:2px solid #fff;}
+.item-check.done{background:#16a34a;}
+.lang-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.lang-tag{background:#f9fafb;border-radius:7px;padding:2px 7px;display:flex;flex-direction:column;}
+.lang-name{font-size:7px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;}
+.lang-val{font-size:10px;color:#374151;}
+.badge{border-radius:4px;padding:1px 5px;font-size:8px;font-weight:bold;}
+.badge-must{background:#dc2626;color:#fff;}
+.badge-opt{background:#e5e7eb;color:#6b7280;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 3px 15px rgba(0,0,0,0.07);border:1px solid #fed7aa;}
+.prog-bar-bg{background:#f3f4f6;border-radius:999px;height:10px;overflow:hidden;}
+.prog-bar{height:100%;border-radius:999px;transition:width 0.4s;}
+
+/* STEPS */
+.step-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border-left:4px solid #d1d5db;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.step-card.done{background:#f0fdf4;border-left-color:#16a34a;}
+.step-card.current{border-left-color:#c2410c;}
+.step-num{width:28px;height:28px;border-radius:50%;background:#e5e7eb;color:#6b7280;font-size:13px;font-weight:bold;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-num.done{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;}
+.step-num.current{background:linear-gradient(135deg,#c2410c,#9a3412);color:#fff;}
+
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:8px;}
+.cal-header-cell{text-align:center;font-size:10px;font-weight:bold;color:#92400e;padding:4px 0;}
+.cal-cell{text-align:center;padding:5px 1px;border-radius:8px;font-size:12px;cursor:pointer;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#374151;}
+.cal-cell:hover{background:#fef3c7;}
+.cal-cell.empty{cursor:default;}
+.cal-cell.today{background:#fef3c7;border:2px solid #f59e0b;font-weight:bold;color:#92400e;}
+.cal-cell.has-fest{background:#eff6ff;}
+.cal-cell.selected{background:#c2410c!important;color:#fff!important;border:none!important;}
+.fest-dot{width:4px;height:4px;border-radius:50%;background:#2563eb;}
+.cal-cell.selected .fest-dot{background:#fff;}
+
+/* FESTIVAL CARDS */
+.fest-card{background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,0.07);border:1px solid #bfdbfe;display:flex;gap:12px;align-items:flex-start;}
+.fest-card.major{border-left:4px solid #2563eb;}
+.fest-card.medium{border-left:4px solid #93c5fd;}
+.fest-date-col{text-align:center;min-width:38px;}
+.region-tag{border-radius:4px;padding:1px 6px;font-size:9px;display:inline-block;margin:2px;}
+
+/* MUHURAT */
+.muh-card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;border:1px solid #bbf7d0;border-left:5px solid #16a34a;box-shadow:0 3px 12px rgba(22,163,74,0.1);}
+.avoid-card{background:#fff5f5;border-radius:16px;padding:14px;margin-bottom:10px;border:1px solid #fca5a5;border-left:5px solid #dc2626;}
+.panchang-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:bold;margin:2px;}
+.q-badge{border-radius:6px;padding:2px 7px;font-size:9px;font-weight:bold;white-space:nowrap;display:inline-block;}
+.q-excellent{background:#14532d;color:#bbf7d0;}
+.q-shubh{background:#166534;color:#dcfce7;}
+.q-bad,.q-avoid{background:#991b1b;color:#fee2e2;}
+.q-good{background:#1d4ed8;color:#dbeafe;}
+
+/* RANGE CARD */
+.range-card{border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+.range-card.good{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-left:5px solid #15803d;}
+.range-card.excellent{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-left:5px solid #14532d;}
+.range-card.avoid-range{background:#fff1f2;border:1px solid #fca5a5;border-left:5px solid #dc2626;}
+
+/* COMPAT FORMS */
+.compat-form{background:linear-gradient(135deg,#fff7ed,#fef3c7);border-radius:14px;padding:14px;margin-bottom:14px;border:1.5px solid #fbbf24;}
+select.form-select{width:100%;padding:7px 24px 7px 8px;border:1.5px solid #fbbf24;border-radius:8px;background:#fff;color:#374151;font-family:Georgia,serif;font-size:11px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2392400e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;cursor:pointer;}
+select.form-select-blue{width:100%;padding:7px 24px 7px 8px;border:1.5px solid #93c5fd;border-radius:8px;background:#fff;color:#374151;font-family:Georgia,serif;font-size:11px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%231e40af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;cursor:pointer;}
+
+/* ACTION BUTTONS */
+.btn{border-radius:10px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;border:none;}
+.btn-primary{background:linear-gradient(135deg,#c2410c,#9a3412);color:#fff;}
+.btn-purple{background:linear-gradient(135deg,#4a1d96,#7c3aed);color:#fff;}
+.btn-outline{background:#fff;border:1.5px solid #fed7aa;color:#374151;}
+
+/* KUTA ROWS */
+.kuta-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.kuta-name{width:72px;font-size:9px;font-weight:bold;color:#374151;flex-shrink:0;}
+.kuta-bar-bg{flex:1;background:#f3f4f6;border-radius:999px;height:5px;overflow:hidden;}
+.kuta-bar{height:100%;border-radius:999px;}
+.kuta-score{font-size:9px;font-weight:bold;min-width:22px;text-align:right;}
+.kuta-detail{font-size:8px;color:#6b7280;max-width:70px;flex-shrink:0;line-height:1.2;}
+
+/* SHARE MODAL */
+#modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1000;align-items:flex-end;justify-content:center;}
+#modal-backdrop.show{display:flex;}
+#modal-box{background:#fff;border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:480px;max-height:80vh;overflow:auto;}
+
+/* SECTION LABELS */
+.section-label{font-size:13px;color:#7c2d12;font-weight:bold;margin-bottom:8px;}
+.section-label.blue{color:#1e3a5f;}
+.section-label.purple{color:#4a1d96;}
+
+/* DAILY MUHURAT TABLE */
+.daily-muh{background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:14px;padding:14px;margin-bottom:14px;border:1.5px solid #d8b4fe;}
+.daily-muh-row{display:flex;align-items:center;gap:10;padding:7px 0;border-bottom:1px solid #e9d5ff;}
+.daily-muh-row:last-child{border-bottom:none;}
+
+/* STEP NAV DOTS */
+.step-dots{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;}
+.step-dot{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#6b7280;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;cursor:pointer;}
+.step-dot.done-dot{background:#7c3aed;color:#fff;}
+.step-dot.cur-dot{background:#c2410c;color:#fff;}
+
+/* TWO COLS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.action-box{border-radius:14px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;}
+
+/* DATE INPUTS */
+input[type=date]{width:100%;padding:7px 8px;border:1.5px solid #7dd3fc;border-radius:8px;font-family:Georgia,serif;font-size:11px;color:#0c4a6e;background:#fff;box-sizing:border-box;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div id="header">
+    <div class="logo-wrap">
+      <div class="logo-icon">ॐ</div>
+      <div>
+        <div class="logo-title">PujaPath</div>
+        <div class="logo-sub">Sacred Rituals Made Simple</div>
+      </div>
+    </div>
+    <button id="btn-back" class="hide" onclick="goBack()">← Back</button>
+  </div>
+
+  <!-- TABS -->
+  <div id="tabs">
+    <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Home</span>
+    </button>
+    <button class="tab-btn" data-tab="calendar" onclick="switchTab('calendar')">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">Calendar</span>
+    </button>
+    <button class="tab-btn" data-tab="muhurat" onclick="switchTab('muhurat')">
+      <span class="tab-icon">⏰</span>
+      <span class="tab-label">Muhurat</span>
+    </button>
+    <button class="tab-btn" data-tab="saved" onclick="switchTab('saved')">
+      <span class="tab-icon">🔖</span>
+      <span class="tab-label">Saved</span>
+    </button>
+    <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">
+      <span class="tab-icon">⚙️</span>
+      <span class="tab-label">Settings</span>
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="content"></div>
+
+</div>
+
+<!-- SHARE MODAL -->
+<div id="modal-backdrop" onclick="closeModal()">
+  <div id="modal-box" onclick="event.stopPropagation()">
+    <div style="font-weight:bold;color:#7c2d12;font-size:16px;margin-bottom:2px;">📤 Share Checklist</div>
+    <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">కుటుంబంతో పంచుకోండి · Copy & share</div>
+    <textarea id="share-text" readonly style="width:100%;height:200px;border-radius:10px;border:1.5px solid #fed7aa;padding:10px;font-size:11px;font-family:monospace;background:#fdfaf5;color:#374151;resize:none;box-sizing:border-box;"></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn btn-primary" style="flex:1;padding:12px;font-size:13px;" onclick="doCopy()">📋 <span id="copy-label">Copy Text</span></button>
+      <button class="btn btn-outline" style="flex:1;padding:12px;font-size:13px;" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const REGIONS = ["All India","Andhra Pradesh","Telangana","North India","Maharashtra","Bengal"];
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAYS_SHORT = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const LANG_COLORS = {Telugu:"#E8660A",Hindi:"#8B0000",Bengali:"#006400",Marathi:"#4B0082"};
+
+const PUJAS = [
+  {id:1,name:"Ganesh Puja",nameHindi:"వినాయక పూజ / गणेश पूजा",icon:"🐘",desc:"Invoke Lord Ganesha for auspicious beginnings",regions:["All India","Maharashtra","Andhra Pradesh","Telangana"],
+    items:[
+      {emoji:"🌺",name:"Red Hibiscus Flower",mandatory:true,langs:{Hindi:"लाल जवाकुसुम",Telugu:"మందారం (Mandaram)",Marathi:"जास्वंद फुल"}},
+      {emoji:"🟡",name:"Turmeric (Haldi)",mandatory:true,langs:{Hindi:"हल्दी",Telugu:"పసుపు (Pasupu)",Marathi:"हळद"}},
+      {emoji:"🔴",name:"Kumkum (Vermillion)",mandatory:true,langs:{Hindi:"कुमकुम",Telugu:"కుంకుమ (Kunkuma)",Marathi:"कुंकू"}},
+      {emoji:"🪔",name:"Deepam (Oil Lamp)",mandatory:true,langs:{Hindi:"दीपक",Telugu:"దీపం (Deepam)",Marathi:"दिवा"}},
+      {emoji:"🫧",name:"Panchamrit",mandatory:true,langs:{Hindi:"पंचामृत",Telugu:"పంచామృతం",Marathi:"पंचामृत"}},
+      {emoji:"🍃",name:"Durva Grass",mandatory:true,langs:{Hindi:"दूर्वा",Telugu:"గరిక (Garika)",Marathi:"दूर्वा गवत"}},
+      {emoji:"🥥",name:"Coconut (Nariyal)",mandatory:true,langs:{Hindi:"नारियल",Telugu:"కొబ్బరి కాయ",Marathi:"नारळ"}},
+      {emoji:"🍚",name:"Rice (Akshata)",mandatory:false,langs:{Hindi:"अक्षत",Telugu:"అక్షతలు",Marathi:"अक्षता"}},
+      {emoji:"🍬",name:"Modak / Ladoo",mandatory:false,langs:{Hindi:"मोदक / लड्डू",Telugu:"మోదకం",Marathi:"मोदक"}},
+      {emoji:"🌿",name:"Betel Leaves (Paan)",mandatory:false,langs:{Hindi:"पान के पत्ते",Telugu:"తమలపాకులు",Marathi:"विडा"}},
+      {emoji:"🪷",name:"Lotus / Marigold",mandatory:false,langs:{Hindi:"कमल / गेंदा",Telugu:"తామర / బంతి",Marathi:"कमळ / झेंडू"}},
+      {emoji:"🧴",name:"Chandan (Sandalwood)",mandatory:false,langs:{Hindi:"चंदन",Telugu:"గంధం (Gandham)",Marathi:"चंदन"}},
+    ]},
+  {id:2,name:"Lakshmi Puja",nameHindi:"లక్ష్మీ పూజ / लक्ष्मी पूजा",icon:"🪷",desc:"Worship Goddess Lakshmi for wealth & prosperity",regions:["All India","Andhra Pradesh","Telangana","Bengal","Maharashtra"],
+    items:[
+      {emoji:"🏺",name:"Kalash (Sacred Pot)",mandatory:true,langs:{Hindi:"कलश",Telugu:"కలశం (Kalasham)",Bengali:"কলস (Kalas)",Marathi:"कळशी"}},
+      {emoji:"🌼",name:"Lotus Flowers",mandatory:true,langs:{Hindi:"कमल के फूल",Telugu:"తామర పువ్వులు",Bengali:"পদ্মফুল",Marathi:"कमळाची फुले"}},
+      {emoji:"🔴",name:"Kumkum (Vermillion)",mandatory:true,langs:{Hindi:"कुमकुम",Telugu:"కుంకుమ",Bengali:"কুমকুম",Marathi:"कुंकू"}},
+      {emoji:"🟡",name:"Turmeric (Haldi)",mandatory:true,langs:{Hindi:"हल्दी",Telugu:"పసుపు",Bengali:"হলুদ",Marathi:"हळद"}},
+      {emoji:"🪔",name:"Deepam (Oil Lamp)",mandatory:true,langs:{Hindi:"दीपक",Telugu:"దీపం",Bengali:"প্রদীপ",Marathi:"दिवा"}},
+      {emoji:"🥥",name:"Coconut (Nariyal)",mandatory:true,langs:{Hindi:"नारियल",Telugu:"కొబ్బరి కాయ",Bengali:"নারকেল",Marathi:"नारळ"}},
+      {emoji:"💰",name:"Gold / Silver Coin",mandatory:true,langs:{Hindi:"सोने/चाँदी का सिक्का",Telugu:"బంగారు నాణెం",Bengali:"সোনার মুদ্রা",Marathi:"नाणे"}},
+      {emoji:"🍚",name:"Rice (Akshata)",mandatory:false,langs:{Hindi:"अक्षत",Telugu:"అక్షతలు",Bengali:"আতপ চাল",Marathi:"अक्षता"}},
+      {emoji:"🍯",name:"Honey (Madhu)",mandatory:false,langs:{Hindi:"शहद",Telugu:"తేనె",Bengali:"মধু",Marathi:"मध"}},
+      {emoji:"🧦",name:"Vastra (New Cloth)",mandatory:false,langs:{Hindi:"नया वस्त्र",Telugu:"వస్త్రం",Bengali:"বস্ত্র",Marathi:"वस्त्र"}},
+      {emoji:"🪷",name:"Rangoli / Alpana",mandatory:false,langs:{Hindi:"रंगोली",Telugu:"ముగ్గు (Muggu)",Bengali:"আলপনা",Marathi:"रांगोळी"}},
+      {emoji:"🌿",name:"Betel Nut (Supari)",mandatory:false,langs:{Hindi:"सुपारी",Telugu:"వక్కపొడి",Bengali:"সুপারি",Marathi:"सुपारी"}},
+    ]},
+  {id:3,name:"Satyanarayana Puja",nameHindi:"సత్యనారాయణ పూజ / सत्यनारायण पूजा",icon:"🙏",desc:"Special puja beloved in Andhra, Telangana & across India",regions:["Andhra Pradesh","Telangana","All India"],
+    items:[
+      {emoji:"🏺",name:"Kalash (Sacred Pot)",mandatory:true,langs:{Telugu:"కలశం (Kalasham)",Hindi:"कलश"}},
+      {emoji:"🥥",name:"Coconut (Nariyal)",mandatory:true,langs:{Telugu:"కొబ్బరి కాయ",Hindi:"नारियल"}},
+      {emoji:"🍌",name:"Banana (Arati Pandu)",mandatory:true,langs:{Telugu:"అరటి పండు (Arati Pandu)",Hindi:"केला"}},
+      {emoji:"🌾",name:"Wheat / Sooji",mandatory:true,langs:{Telugu:"సూజి / రవ్వ",Hindi:"सूजी / रवा"}},
+      {emoji:"🍬",name:"Sugar / Jaggery",mandatory:true,langs:{Telugu:"పంచదార / బెల్లం",Hindi:"चीनी / गुड़"}},
+      {emoji:"🪔",name:"Deepam (Oil Lamp)",mandatory:true,langs:{Telugu:"దీపం (Deepam)",Hindi:"दीपक"}},
+      {emoji:"🌺",name:"Flowers (Pushpam)",mandatory:true,langs:{Telugu:"పుష్పాలు",Hindi:"फूल"}},
+      {emoji:"🔴",name:"Kumkum & Haldi",mandatory:true,langs:{Telugu:"కుంకుమ-పసుపు",Hindi:"कुमकुम-हल्दी"}},
+      {emoji:"🍚",name:"Rice (Akshata)",mandatory:true,langs:{Telugu:"అక్షతలు",Hindi:"अक्षत"}},
+      {emoji:"🎋",name:"Banana Leaves",mandatory:false,langs:{Telugu:"అరటి ఆకులు",Hindi:"केले के पत्ते"}},
+      {emoji:"🕯️",name:"Camphor (Karpooram)",mandatory:false,langs:{Telugu:"కర్పూరం",Hindi:"कपूर"}},
+      {emoji:"🧴",name:"Chandan (Sandalwood)",mandatory:false,langs:{Telugu:"గంధం",Hindi:"चंदन"}},
+      {emoji:"🌿",name:"Tulasi Leaves",mandatory:false,langs:{Telugu:"తులసి ఆకులు",Hindi:"तुलसी पत्ते"}},
+      {emoji:"🪷",name:"Rangoli / Muggu",mandatory:false,langs:{Telugu:"ముగ్గు",Hindi:"रंगोली"}},
+    ]},
+  {id:4,name:"Durga Puja / Navratri",nameHindi:"దుర్గా పూజ / दुर्गा पूजा",icon:"⚔️",desc:"Nine nights of devotion to Goddess Durga",regions:["All India","Bengal","North India","Andhra Pradesh","Telangana"],
+    items:[
+      {emoji:"🌺",name:"Red Flowers",mandatory:true,langs:{Hindi:"लाल फूल",Telugu:"ఎర్ర పువ్వులు",Bengali:"লাল ফুল",Marathi:"लाल फुले"}},
+      {emoji:"🔴",name:"Kumkum (Sindoor)",mandatory:true,langs:{Hindi:"कुमकुम / सिंदूर",Telugu:"కుంకుమ",Bengali:"সিঁদুর",Marathi:"कुंकू"}},
+      {emoji:"🪔",name:"Akhanda Deepam",mandatory:true,langs:{Hindi:"अखंड दीपक",Telugu:"అఖండ దీపం",Bengali:"আখণ্ড প্রদীপ",Marathi:"अखंड दिवा"}},
+      {emoji:"🥥",name:"Coconut (Nariyal)",mandatory:true,langs:{Hindi:"नारियल",Telugu:"కొబ్బరి కాయ",Bengali:"নারকেল",Marathi:"नारळ"}},
+      {emoji:"🏺",name:"Kalash (Sacred Pot)",mandatory:true,langs:{Hindi:"कलश",Telugu:"కలశం",Bengali:"কলস",Marathi:"कळशी"}},
+      {emoji:"🧿",name:"Yantra (Sacred Diagram)",mandatory:false,langs:{Hindi:"यंत्र",Telugu:"యంత్రం",Bengali:"যন্ত্র",Marathi:"यंत्र"}},
+      {emoji:"🍚",name:"Rice & Whole Grains",mandatory:false,langs:{Hindi:"अनाज / अक्षत",Telugu:"అక్షతలు",Bengali:"আতপ চাল",Marathi:"अक्षता"}},
+      {emoji:"🌿",name:"Bilva / Tulasi Leaves",mandatory:false,langs:{Hindi:"बिल्व/तुलसी पत्ते",Telugu:"మారేడు / తులసి",Bengali:"বেলপাতা",Marathi:"बेलपत्र"}},
+      {emoji:"🎀",name:"Red Chunari (Cloth)",mandatory:false,langs:{Hindi:"लाल चुनरी",Telugu:"ఎర్ర వస్త్రం",Bengali:"লাল শাড়ি",Marathi:"लाल साडी"}},
+    ]},
+];
+
+const PUJA_STEPS = {
+  1:[
+    {step:1,title:"Prepare the Space",emoji:"🧹",time:"10 min",desc:"Clean the puja area thoroughly. Spread a clean red or yellow cloth on the platform. Place the idol or image of Lord Ganesha in the center facing East or North."},
+    {step:2,title:"Take Sankalpa (Vow)",emoji:"🙏",time:"2 min",desc:"Sit facing East. Hold water and flowers in your right hand. Take a vow saying your name, gotra, and the purpose of the puja. This sets your intention before God."},
+    {step:3,title:"Kalash Sthapana",emoji:"🏺",time:"5 min",desc:"Fill a copper or brass pot with water. Place mango leaves around the neck of the pot. Put a coconut on top. This Kalash represents Lord Ganesha's blessings."},
+    {step:4,title:"Ganapati Avahan (Invocation)",emoji:"✨",time:"3 min",desc:"Light the lamp (Deepam) and incense. Ring the bell. Chant 'Om Gam Ganapataye Namaha' 21 times to invite Lord Ganesha into the puja space."},
+    {step:5,title:"Shodashopachara Puja",emoji:"🌺",time:"15 min",desc:"Offer 16 items one by one: 1)Water to feet 2)Water to hands 3)Water to drink 4)Bathing water 5)Cloth 6)Sacred thread 7)Sandalwood paste 8)Flowers 9)Incense 10)Lamp 11)Naivedyam 12)Betel 13)Coconut 14)Dakshina 15)Aarti 16)Pushpanjali"},
+    {step:6,title:"Apply Kumkum & Haldi",emoji:"🔴",time:"2 min",desc:"Apply turmeric first, then kumkum on Ganesha's forehead. Offer red hibiscus flowers — these are Lord Ganesha's favourite. Durva grass is very sacred, offer in sets of 3 or 21."},
+    {step:7,title:"Offer Naivedyam (Food)",emoji:"🍬",time:"5 min",desc:"Offer Modak or Ladoo — Lord Ganesha's favourite sweet. Place the sweet before the idol. Sprinkle water around the offering. Chant 'Om Gam Ganapataye Namaha' while offering."},
+    {step:8,title:"Aarti (Waving of Lamp)",emoji:"🪔",time:"5 min",desc:"Light the camphor or oil lamp. Wave it in a circular clockwise motion before Ganesha 7 times. Ring the bell continuously. Sing Ganesha Aarti — 'Jai Ganesh Jai Ganesh Deva...'"},
+    {step:9,title:"Pradakshina & Namaskara",emoji:"🔄",time:"3 min",desc:"Circumambulate (go around) the idol 3 times clockwise. Then prostrate (do Sashtanga Namaskara) before Ganesha with full devotion."},
+    {step:10,title:"Visarjan (Conclusion)",emoji:"🌊",time:"3 min",desc:"Thank Lord Ganesha for accepting your puja. Seek forgiveness for any mistakes made during the puja. Distribute prasad (Modak/Ladoo) to all present."},
+  ],
+  2:[
+    {step:1,title:"Clean & Decorate",emoji:"🧹",time:"15 min",desc:"Clean the entire house, especially the puja room. Draw Rangoli/Muggu at the entrance with lotus designs. Decorate with marigold flowers and mango leaves. Goddess Lakshmi is attracted to clean, beautiful spaces."},
+    {step:2,title:"Kalash Sthapana",emoji:"🏺",time:"5 min",desc:"Set up the sacred pot filled with water, topped with coconut and mango leaves. Place a gold or silver coin inside the Kalash — this represents Goddess Lakshmi's wealth."},
+    {step:3,title:"Place Lakshmi Idol/Image",emoji:"🪷",time:"3 min",desc:"Place the idol or photo of Goddess Lakshmi facing North (direction of wealth). She should be seated on a lotus. Place the Kalash to her right side."},
+    {step:4,title:"Avahanam (Invocation)",emoji:"✨",time:"5 min",desc:"Light the lamp and incense. Ring the bell. Chant 'Om Shreem Mahalakshmiyei Namaha' 108 times using a mala (rosary). This invites Goddess Lakshmi into your home."},
+    {step:5,title:"Panchamrit Abhishekam",emoji:"🫧",time:"10 min",desc:"Bathe the idol with Panchamrit (mixture of milk, curd, honey, ghee, and sugar) one by one. After each item, wash with clean water. This purifies and pleases the Goddess."},
+    {step:6,title:"Shringar (Decoration)",emoji:"💰",time:"5 min",desc:"Offer fresh yellow/white flowers (especially lotus). Apply kumkum and turmeric. Offer a new cloth (Vastra). Place gold/silver coins before the Goddess as an offering of wealth."},
+    {step:7,title:"Offer Naivedyam",emoji:"🍯",time:"5 min",desc:"Offer sweets, fruits, and honey. Include betel nut (Supari) and betel leaves. Place coconut as the main offering. Everything offered should be fresh and prepared with love."},
+    {step:8,title:"Lakshmi Aarti",emoji:"🪔",time:"7 min",desc:"Wave the lamp clockwise before Goddess Lakshmi. Ring the bell continuously. Chant 'Om Jai Lakshmi Mata...' Invite all family members to attend the Aarti together."},
+    {step:9,title:"Lakshmi Stotra Path",emoji:"📿",time:"10 min",desc:"Recite Shri Suktam or Lakshmi Ashtakam. If you don't know the verses, simply chant 'Om Shreem Hreem Shreem Mahalakshmiyei Namaha' with devotion."},
+    {step:10,title:"Distribute Prasad",emoji:"🎁",time:"5 min",desc:"Distribute the offered sweets and fruits as prasad. Share with neighbors and family. Keep some coins from the puja in your cash box — they carry Lakshmi's blessings all year."},
+  ],
+  3:[
+    {step:1,title:"Prepare the Hall",emoji:"🧹",time:"20 min",desc:"Clean the entire house. Set up a raised platform (Mantap) with banana leaves, mango leaves, and flowers. Invite family, relatives and neighbors — Satyanarayana Puja is best done in company."},
+    {step:2,title:"Sankalpa",emoji:"🙏",time:"5 min",desc:"The main devotee (host) sits with family. Hold water, flowers, and rice in the right hand. Take the Sankalpa (vow) stating the purpose — for fulfillment of wishes, gratitude, or celebration."},
+    {step:3,title:"Ganapati Puja First",emoji:"🐘",time:"10 min",desc:"Always begin by worshipping Lord Ganesha first before any other puja. Offer red flowers, Durva grass, and Modak to Ganesha. Seek his blessings to remove obstacles from the main puja."},
+    {step:4,title:"Kalash Sthapana",emoji:"🏺",time:"5 min",desc:"Set up Kalash with water, coconut, and mango leaves. Place the Satyanarayan idol or photo in the center. Arrange the Naivedyam plate with Panchamrit ingredients nearby."},
+    {step:5,title:"Panchamrit Abhishekam",emoji:"🫧",time:"10 min",desc:"Bathe the idol with Panchamrit — milk, curd, honey, ghee, sugar — one by one slowly. Then rinse with clean water. This is the most sacred part of the puja."},
+    {step:6,title:"Shodashopachara Puja",emoji:"🌺",time:"20 min",desc:"Offer all 16 services: flowers, sandalwood, incense, lamp, food etc. Offer banana (Arati Pandu) — very important in Telugu tradition. Offer Tulasi leaves which are very dear to Lord Vishnu."},
+    {step:7,title:"Prepare Prasad (Sheera)",emoji:"🌾",time:"20 min",desc:"Make Sheera/Halwa with wheat flour/sooji, sugar/jaggery, ghee, and bananas. This is the sacred Prasad of Satyanarayana Puja. Prepare before the Puja and offer it during Naivedyam."},
+    {step:8,title:"Katha (Story Narration)",emoji:"📖",time:"30 min",desc:"Read or listen to the Satyanarayan Katha (5 chapters). This story of Lord Satyanarayan's greatness is the heart of this puja. Everyone must sit attentively and listen with devotion."},
+    {step:9,title:"Aarti & Mangalashtakam",emoji:"🪔",time:"10 min",desc:"Perform the Aarti with camphor and oil lamp. Sing Mangalashtakam — the auspicious verses. All family members and guests participate together, making the atmosphere divine."},
+    {step:10,title:"Prasad Distribution",emoji:"🎁",time:"10 min",desc:"Distribute the Sheera Prasad to everyone present. Nobody should leave without taking Prasad — it carries Lord Satyanarayan's blessings. Share remaining Prasad with neighbors too."},
+  ],
+  4:[
+    {step:1,title:"Setup the Durga Mandap",emoji:"🏛️",time:"30 min",desc:"Create a beautiful altar with red cloth. Decorate with red flowers (marigold, hibiscus). Set up Goddess Durga's idol or image. Keep the Akhanda Deepam (uninterrupted lamp) — it must not go out for 9 days."},
+    {step:2,title:"Kalash Sthapana",emoji:"🏺",time:"10 min",desc:"Day 1 of Navratri: Establish the Kalash with water, coconut, and mango leaves. Sow barley seeds in a clay pot (Navratri Jwar) — the sprouting represents Divine blessings."},
+    {step:3,title:"9 Days Worship Plan",emoji:"📅",time:"Daily",desc:"Day 1: Shailputri | Day 2: Brahmacharini | Day 3: Chandraghanta | Day 4: Kushmanda | Day 5: Skandamata | Day 6: Katyayani | Day 7: Kalaratri | Day 8: Mahagauri | Day 9: Siddhidatri"},
+    {step:4,title:"Daily Puja Routine",emoji:"🌺",time:"20 min",desc:"Each morning: Take bath, light the lamp, offer red flowers and red chunari to Goddess. Chant 'Om Dum Durgayei Namaha' 108 times. Apply Sindoor (kumkum) to the Goddess's forehead."},
+    {step:5,title:"Durga Saptashati Path",emoji:"📿",time:"45 min",desc:"Recite Durga Saptashati (700 verses) or listen to it daily. You can recite specific chapters each day. If full path not possible, chant 'Ya Devi Sarva Bhuteshu...' with devotion."},
+    {step:6,title:"Aarti Morning & Evening",emoji:"🪔",time:"10 min",desc:"Perform Aarti twice daily — morning at sunrise and evening at sunset. Wave camphor lamp clockwise before Goddess. Sing 'Jai Ambe Gauri...' or regional Durga Aarti songs."},
+    {step:7,title:"Kanya Puja (Day 8 or 9)",emoji:"👧",time:"30 min",desc:"Invite 9 young girls (below 12 years) representing 9 forms of Durga. Wash their feet, apply Alta, offer food — Puri, Chana, Halwa. This is a very sacred act in Navratri."},
+    {step:8,title:"Havan (if possible)",emoji:"🔥",time:"30 min",desc:"On Ashtami or Navami: Perform a small Havan (fire ritual) with ghee, sesame, and samagri. Chant Durga Devi mantras while offering into the sacred fire. This purifies the entire home."},
+    {step:9,title:"Vijayadasami (Day 10)",emoji:"⚔️",time:"15 min",desc:"On Dasara day: Worship weapons and tools (Ayudha Puja). Write 'Shri Ram' or 'Jai Mata Di' in your books. Begin learning new skills today — it's the most auspicious day for starting new things."},
+    {step:10,title:"Visarjan",emoji:"🌊",time:"10 min",desc:"Immerse the Goddess's idol in water (river, lake, or bucket of water at home). Thank her for visiting your home. Seek blessings for the whole year. Distribute Prasad to neighbors and family."},
+  ],
+};
+
+const FESTIVALS = [
+  {date:"2025-02-26",name:"Maha Shivaratri",local:"మహా శివరాత్రి / महा शिवरात्रि",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra","Bengal"],icon:"🕉️",type:"major"},
+  {date:"2025-03-14",name:"Holi",local:"హోళీ / होली",regions:["All India","North India","Maharashtra"],icon:"🎨",type:"major"},
+  {date:"2025-03-30",name:"Ugadi (Telugu New Year)",local:"ఉగాది — తెలుగు నూతన సంవత్సరం",regions:["Andhra Pradesh","Telangana"],icon:"🌸",type:"major"},
+  {date:"2025-03-30",name:"Gudi Padwa",local:"गुडी पाडवा",regions:["Maharashtra"],icon:"🎋",type:"major"},
+  {date:"2025-04-06",name:"Ram Navami",local:"రామ నవమి / राम नवमी",regions:["All India","Andhra Pradesh","Telangana","North India"],icon:"🏹",type:"major"},
+  {date:"2025-04-14",name:"Tamil New Year / Vishu",local:"తమిళ నూతన సంవత్సరం / विशु",regions:["All India"],icon:"🌺",type:"medium"},
+  {date:"2025-05-12",name:"Buddha Purnima",local:"బుద్ధ పూర్ణిమ / बुद्ध पूर्णिमा",regions:["All India"],icon:"☸️",type:"medium"},
+  {date:"2025-07-06",name:"Rath Yatra",local:"రథ యాత్ర / रथ यात्रा",regions:["All India","Bengal"],icon:"🛕",type:"major"},
+  {date:"2025-08-09",name:"Varalakshmi Vratam",local:"వరలక్ష్మీ వ్రతం",regions:["Andhra Pradesh","Telangana"],icon:"🪷",type:"major"},
+  {date:"2025-08-16",name:"Raksha Bandhan",local:"రాఖీ / राखी",regions:["All India","North India","Maharashtra"],icon:"🪢",type:"major"},
+  {date:"2025-08-20",name:"Krishna Janmashtami",local:"కృష్ణ జన్మాష్టమి / जन्माष्टमी",regions:["All India","Andhra Pradesh","Telangana"],icon:"🪈",type:"major"},
+  {date:"2025-08-27",name:"Vinayaka Chaturthi",local:"వినాయక చవితి / गणेश चतुर्थी",regions:["All India","Andhra Pradesh","Telangana","Maharashtra"],icon:"🐘",type:"major"},
+  {date:"2025-09-21",name:"Onam",local:"ఓణం / ओणम",regions:["All India"],icon:"🌸",type:"medium"},
+  {date:"2025-10-02",name:"Dasara / Vijayadasami",local:"దసరా / विजयादशमी",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra","Bengal"],icon:"⚔️",type:"major"},
+  {date:"2025-10-20",name:"Diwali / Deepavali",local:"దీపావళి / दिवाली",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra"],icon:"🪔",type:"major"},
+  {date:"2025-10-23",name:"Govardhan Puja",local:"గోవర్ధన్ పూజ / गोवर्धन पूजा",regions:["All India","North India"],icon:"🐄",type:"medium"},
+  {date:"2025-11-05",name:"Kartik Purnima",local:"కార్తీక పూర్ణిమ / कार्तिक पूर्णिमा",regions:["All India","Andhra Pradesh","Telangana"],icon:"🌕",type:"medium"},
+  {date:"2025-12-25",name:"Christmas",local:"క్రిస్మస్ / क्रिसमस",regions:["All India"],icon:"⭐",type:"medium"},
+  {date:"2026-01-14",name:"Makar Sankranti / Pongal",local:"మకర సంక్రాంతి / Pongal / मकर संक्रांति",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra"],icon:"🌾",type:"major"},
+  {date:"2026-02-15",name:"Maha Shivaratri",local:"మహా శివరాత్రి / महा शिवरात्रि",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra","Bengal"],icon:"🕉️",type:"major"},
+  {date:"2026-03-03",name:"Holi",local:"హోళీ / होली",regions:["All India","North India","Maharashtra"],icon:"🎨",type:"major"},
+  {date:"2026-03-19",name:"Ugadi (Telugu New Year)",local:"ఉగాది — తెలుగు నూతన సంవత్సరం",regions:["Andhra Pradesh","Telangana"],icon:"🌸",type:"major"},
+  {date:"2026-03-19",name:"Gudi Padwa",local:"गुडी पाडवा",regions:["Maharashtra"],icon:"🎋",type:"major"},
+  {date:"2026-03-26",name:"Ram Navami",local:"రామ నవమి / राम नवमी",regions:["All India","Andhra Pradesh","Telangana","North India"],icon:"🏹",type:"major"},
+  {date:"2026-04-03",name:"Mahavir Jayanti",local:"महावीर जयंती",regions:["All India","North India"],icon:"☮️",type:"medium"},
+  {date:"2026-05-01",name:"Buddha Purnima",local:"బుద్ధ పూర్ణిమ / बुद्ध पूर्णिमा",regions:["All India"],icon:"☸️",type:"medium"},
+  {date:"2026-07-25",name:"Rath Yatra",local:"రథ యాత్ర / रथ यात्रा",regions:["All India","Bengal"],icon:"🛕",type:"major"},
+  {date:"2026-08-06",name:"Raksha Bandhan",local:"రాఖీ / राखी",regions:["All India","North India","Maharashtra"],icon:"🪢",type:"major"},
+  {date:"2026-08-12",name:"Krishna Janmashtami",local:"కృష్ణ జన్మాష్టమి / जन्माष्टमी",regions:["All India","Andhra Pradesh","Telangana"],icon:"🪈",type:"major"},
+  {date:"2026-08-16",name:"Varalakshmi Vratam",local:"వరలక్ష్మీ వ్రతం",regions:["Andhra Pradesh","Telangana"],icon:"🪷",type:"major"},
+  {date:"2026-08-23",name:"Vinayaka Chaturthi",local:"వినాయక చవితి / गणेश चतुर्थी",regions:["All India","Andhra Pradesh","Telangana","Maharashtra"],icon:"🐘",type:"major"},
+  {date:"2026-09-10",name:"Onam",local:"ఓణం / ओणम",regions:["All India"],icon:"🌸",type:"medium"},
+  {date:"2026-10-09",name:"Navratri Begins",local:"నవరాత్రులు / नवरात्रि",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra","Bengal"],icon:"⚔️",type:"major"},
+  {date:"2026-10-19",name:"Dasara / Vijayadasami",local:"దసరా / विजयादशमी",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra","Bengal"],icon:"⚔️",type:"major"},
+  {date:"2026-11-08",name:"Diwali / Deepavali",local:"దీపావళి / दिवाली",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra"],icon:"🪔",type:"major"},
+  {date:"2026-11-11",name:"Govardhan Puja",local:"గోవర్ధన్ పూజ",regions:["All India","North India"],icon:"🐄",type:"medium"},
+  {date:"2026-11-24",name:"Kartik Purnima",local:"కార్తీక పూర్ణిమ",regions:["All India","Andhra Pradesh","Telangana"],icon:"🌕",type:"medium"},
+  {date:"2026-12-25",name:"Christmas",local:"క్రిస్మస్ / क्रिसमस",regions:["All India"],icon:"⭐",type:"medium"},
+  {date:"2027-01-14",name:"Makar Sankranti / Pongal",local:"మకర సంక్రాంతి / Pongal",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra"],icon:"🌾",type:"major"},
+  {date:"2027-02-04",name:"Maha Shivaratri",local:"మహా శివరాత్రి / महा शिवरात्रि",regions:["All India"],icon:"🕉️",type:"major"},
+  {date:"2027-03-21",name:"Holi",local:"హోళీ / होली",regions:["All India","North India","Maharashtra"],icon:"🎨",type:"major"},
+  {date:"2027-04-07",name:"Ugadi (Telugu New Year)",local:"ఉగాది",regions:["Andhra Pradesh","Telangana"],icon:"🌸",type:"major"},
+  {date:"2027-08-09",name:"Raksha Bandhan",local:"రాఖీ / राखी",regions:["All India","North India","Maharashtra"],icon:"🪢",type:"major"},
+  {date:"2027-08-29",name:"Vinayaka Chaturthi",local:"వినాయక చవితి / गणेश चतुर्थी",regions:["All India","Andhra Pradesh","Telangana","Maharashtra"],icon:"🐘",type:"major"},
+  {date:"2027-10-29",name:"Diwali / Deepavali",local:"దీపావళి / दिवाली",regions:["All India","Andhra Pradesh","Telangana","North India","Maharashtra"],icon:"🪔",type:"major"},
+];
+
+const NAKSHATRAS = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+const RASHIS = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)","Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
+const RASHI_LIST = ["Mesha","Vrishabha","Mithuna","Karka","Simha","Kanya","Tula","Vrishchika","Dhanu","Makara","Kumbha","Meena"];
+const NAK_RASHI = {"Ashwini":"Mesha","Bharani":"Mesha","Krittika":"Mesha","Rohini":"Vrishabha","Mrigashira":"Vrishabha","Ardra":"Mithuna","Punarvasu":"Mithuna","Pushya":"Karka","Ashlesha":"Karka","Magha":"Simha","Purva Phalguni":"Simha","Uttara Phalguni":"Kanya","Hasta":"Kanya","Chitra":"Tula","Swati":"Tula","Vishakha":"Vrishchika","Anuradha":"Vrishchika","Jyeshtha":"Vrishchika","Mula":"Dhanu","Purva Ashadha":"Dhanu","Uttara Ashadha":"Makara","Shravana":"Makara","Dhanishta":"Kumbha","Shatabhisha":"Kumbha","Purva Bhadrapada":"Meena","Uttara Bhadrapada":"Meena","Revati":"Meena"};
+const NAK_YONI = {"Ashwini":"Horse","Shatabhisha":"Horse","Bharani":"Elephant","Revati":"Elephant","Pushya":"Goat","Krittika":"Goat","Rohini":"Serpent","Mrigashira":"Serpent","Ardra":"Dog","Mula":"Dog","Punarvasu":"Cat","Ashlesha":"Cat","Magha":"Rat","Purva Phalguni":"Rat","Purva Ashadha":"Monkey","Uttara Ashadha":"Mongoose","Uttara Phalguni":"Cow","Uttara Bhadrapada":"Cow","Hasta":"Buffalo","Swati":"Buffalo","Chitra":"Tiger","Vishakha":"Tiger","Anuradha":"Deer","Jyeshtha":"Deer","Shravana":"Monkey","Dhanishta":"Lion","Purva Bhadrapada":"Lion"};
+const FRIEND_YONI = {"Horse":["Horse","Deer"],"Elephant":["Elephant","Rabbit"],"Goat":["Goat","Deer"],"Serpent":["Serpent","Mongoose"],"Dog":["Dog","Deer"],"Cat":["Cat","Rat"],"Rat":["Rat","Cat"],"Cow":["Cow","Buffalo"],"Buffalo":["Buffalo","Cow"],"Tiger":["Tiger","Deer"],"Monkey":["Monkey","Horse"],"Deer":["Deer","Horse","Dog","Tiger","Goat"],"Lion":["Lion","Elephant"],"Mongoose":["Mongoose"]};
+const ENEMY_YONI = {"Horse":["Buffalo"],"Elephant":["Lion"],"Goat":["Monkey"],"Serpent":["Mongoose"],"Cat":["Dog"],"Dog":["Cat"],"Rat":["Elephant"],"Cow":["Tiger"],"Buffalo":["Horse"],"Tiger":["Cow"],"Monkey":["Goat"],"Lion":["Elephant","Rat"],"Mongoose":["Serpent"]};
+const NAK_NADI = {"Ashwini":"Vata","Ardra":"Vata","Punarvasu":"Vata","Uttara Phalguni":"Vata","Hasta":"Vata","Jyeshtha":"Vata","Mula":"Vata","Shatabhisha":"Vata","Purva Bhadrapada":"Vata","Bharani":"Pitta","Mrigashira":"Pitta","Pushya":"Pitta","Purva Phalguni":"Pitta","Chitra":"Pitta","Anuradha":"Pitta","Purva Ashadha":"Pitta","Dhanishta":"Pitta","Uttara Bhadrapada":"Pitta","Krittika":"Kapha","Rohini":"Kapha","Ashlesha":"Kapha","Magha":"Kapha","Swati":"Kapha","Vishakha":"Kapha","Uttara Ashadha":"Kapha","Shravana":"Kapha","Revati":"Kapha"};
+const TARA_QUALITY = [0,1,4,1,4,1,4,1,5,5];
+const TARA_NAMES = {1:"Janma",2:"Sampat",3:"Vipat",4:"Kshema",5:"Pratyari",6:"Sadhaka",7:"Vadha",8:"Mitra",9:"Ati-Mitra"};
+const RAHU_KALAM = {Monday:"07:30–09:00 AM",Tuesday:"03:00–04:30 PM",Wednesday:"12:00–01:30 PM",Thursday:"01:30–03:00 PM",Friday:"10:30 AM–12:00 PM",Saturday:"09:00–10:30 AM",Sunday:"04:30–06:00 PM"};
+const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const TODAY_DAY = DAY_NAMES[new Date().getDay()];
+
+const SHUBH_DATES = {
+  marriage:[
+    {rangeLabel:"January 15–31, 2026",rangeDesc:"Post-Sankranti window — Sun in Makara, Shukra strong.",quality:"shubh",avoid:false,dates:[
+      {date:"2026-01-18",day:"Sun",tithi:"Panchami",nakshatra:"Rohini",lagna:"Vrishabha",timing:"07:15–11:30 AM",quality:"excellent",highlights:["Rohini Nakshatra","Shukra Hora"],rashi_compat:["Mesha","Vrishabha","Mithuna","Karka","Simha","Tula"],nak_compat:["Ashwini","Rohini","Hasta","Pushya"]},
+      {date:"2026-01-25",day:"Sun",tithi:"Saptami",nakshatra:"Hasta",lagna:"Kanya",timing:"08:00–11:00 AM",quality:"shubh",highlights:["Hasta Nakshatra","Kanya Lagna"],rashi_compat:["Kanya","Makara","Vrishabha","Mithuna"],nak_compat:["Hasta","Rohini","Swati","Chitra"]},
+    ]},
+    {rangeLabel:"February 1–20, 2026",rangeDesc:"Excellent window — Guru direct, Shukra in Makara.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-02-01",day:"Sun",tithi:"Trayodashi",nakshatra:"Uttara Phalguni",lagna:"Kanya",timing:"06:45–09:00 AM",quality:"excellent",highlights:["Uttara Phalguni","Guru aspect strong"],rashi_compat:["Vrishabha","Kanya","Makara","Tula","Kumbha"],nak_compat:["Uttara Phalguni","Hasta","Rohini","Revati"]},
+      {date:"2026-02-08",day:"Sun",tithi:"Panchami",nakshatra:"Swati",lagna:"Tula",timing:"09:00 AM–12:00 PM",quality:"shubh",highlights:["Swati Nakshatra","Tula Lagna"],rashi_compat:["Tula","Mithuna","Kumbha","Dhanu"],nak_compat:["Swati","Chitra","Anuradha","Vishakha"]},
+      {date:"2026-02-15",day:"Sun",tithi:"Dwadashi",nakshatra:"Uttara Ashadha",lagna:"Makara",timing:"08:00–11:30 AM",quality:"shubh",highlights:["Uttara Ashadha","Shukla Paksha"],rashi_compat:["Makara","Kanya","Vrishabha"],nak_compat:["Uttara Ashadha","Shravana","Pushya"]},
+    ]},
+    {rangeLabel:"April 19 – May 15, 2026",rangeDesc:"Spring muhurat season — Guru in Mithuna.",quality:"shubh",avoid:false,dates:[
+      {date:"2026-04-19",day:"Sun",tithi:"Dwitiya",nakshatra:"Mrigashira",lagna:"Mithuna",timing:"08:00 AM–12:30 PM",quality:"shubh",highlights:["Mrigashira Nakshatra","Shubha Yoga"],rashi_compat:["Mithuna","Vrishchika","Dhanu","Meena"],nak_compat:["Mrigashira","Rohini","Ardra","Punarvasu"]},
+      {date:"2026-04-26",day:"Sun",tithi:"Navami",nakshatra:"Pushya",lagna:"Karka",timing:"07:30–10:00 AM",quality:"excellent",highlights:["Pushya Nakshatra","Karka Lagna"],rashi_compat:["All rashis — Pushya always auspicious"],nak_compat:["All nakshatras compatible with Pushya"]},
+      {date:"2026-05-10",day:"Sun",tithi:"Purnima",nakshatra:"Hasta",lagna:"Kanya",timing:"07:00–10:15 AM",quality:"excellent",highlights:["Purnima Tithi","Hasta Nakshatra"],rashi_compat:["Kanya","Makara","Vrishabha","Mithuna"],nak_compat:["Hasta","Rohini","Uttara Phalguni","Swati"]},
+    ]},
+    {rangeLabel:"July 1 – November 1, 2026",rangeDesc:"Chaturmas — 4 months inauspicious for weddings. Avoid all marriage ceremonies.",quality:"avoid",avoid:true,dates:[]},
+    {rangeLabel:"November 5 – December 25, 2026 ⭐ Best Season",rangeDesc:"Post-Chaturmas — Guru in Vrishabha, Shukra strong. MOST auspicious wedding season of 2026.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-11-15",day:"Sun",tithi:"Panchami",nakshatra:"Rohini",lagna:"Vrishabha",timing:"07:00–11:30 AM",quality:"excellent",highlights:["Rohini Nakshatra","Best of Season","Guru aspect"],rashi_compat:["Mesha","Vrishabha","Karka","Simha","Tula"],nak_compat:["Rohini","Mrigashira","Uttara Phalguni","Pushya"]},
+      {date:"2026-11-22",day:"Sun",tithi:"Dwadashi",nakshatra:"Hasta",lagna:"Kanya",timing:"08:00–11:00 AM",quality:"excellent",highlights:["Hasta Nakshatra","Shukla Paksha"],rashi_compat:["Kanya","Makara","Vrishabha","Mithuna"],nak_compat:["Hasta","Chitra","Uttara Phalguni","Swati"]},
+      {date:"2026-12-03",day:"Thu",tithi:"Chaturdashi",nakshatra:"Pushya",lagna:"Karka",timing:"09:30 AM–01:00 PM",quality:"excellent",highlights:["GURU PUSHYA YOGA","Rarest muhurat of 2026"],rashi_compat:["All rashis — Universal muhurat"],nak_compat:["All nakshatras — Universal"]},
+      {date:"2026-12-13",day:"Sun",tithi:"Panchami",nakshatra:"Uttara Phalguni",lagna:"Kanya",timing:"08:00–11:00 AM",quality:"excellent",highlights:["Uttara Phalguni","Kanya Lagna"],rashi_compat:["Kanya","Makara","Vrishabha","Tula"],nak_compat:["Uttara Phalguni","Rohini","Hasta","Revati"]},
+      {date:"2026-12-20",day:"Sun",tithi:"Dvadashi",nakshatra:"Uttara Ashadha",lagna:"Makara",timing:"07:30–10:30 AM",quality:"shubh",highlights:["Uttara Ashadha","Makara Lagna"],rashi_compat:["Makara","Kanya","Vrishabha","Dhanu"],nak_compat:["Uttara Ashadha","Shravana","Pushya","Rohini"]},
+    ]},
+  ],
+  gruhapravesam:[
+    {rangeLabel:"February 1–28, 2026",rangeDesc:"Excellent housewarming window — Shukla Paksha preferred, Guru strong.",quality:"shubh",avoid:false,dates:[
+      {date:"2026-02-08",day:"Sun",tithi:"Panchami",nakshatra:"Swati",lagna:"Tula",timing:"08:30–10:30 AM",quality:"shubh",highlights:["Swati Nakshatra","Tula Lagna"],rashi_compat:["Tula","Kumbha","Mithuna"],nak_compat:["Swati","Rohini","Hasta"]},
+      {date:"2026-02-15",day:"Sun",tithi:"Dwadashi",nakshatra:"Revati",lagna:"Meena",timing:"08:30–10:00 AM",quality:"excellent",highlights:["Revati Nakshatra","Mercury strong"],rashi_compat:["Meena","Karka","Vrishchika"],nak_compat:["Revati","Rohini","Pushya"]},
+    ]},
+    {rangeLabel:"March 19 – April 14, 2026",rangeDesc:"Ugadi season — New Year energy, auspicious for entering new homes.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-03-22",day:"Sun",tithi:"Tritiya",nakshatra:"Swati",lagna:"Tula",timing:"07:00–09:45 AM",quality:"shubh",highlights:["Swati Nakshatra","Ugadi energy"],rashi_compat:["Tula","Kumbha","Mithuna"],nak_compat:["Swati","Rohini","Revati"]},
+      {date:"2026-04-05",day:"Sun",tithi:"Saptami",nakshatra:"Rohini",lagna:"Vrishabha",timing:"08:00–11:00 AM",quality:"excellent",highlights:["Rohini Nakshatra","Vrishabha Lagna"],rashi_compat:["Mesha","Vrishabha","Karka","Simha"],nak_compat:["Rohini","Mrigashira","Pushya"]},
+    ]},
+    {rangeLabel:"July 1 – November 1, 2026",rangeDesc:"Chaturmas — Inauspicious for Gruha Pravesam.",quality:"avoid",avoid:true,dates:[]},
+    {rangeLabel:"November 10 – December 25, 2026",rangeDesc:"Best housewarming season of 2026.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-11-15",day:"Sun",tithi:"Panchami",nakshatra:"Rohini",lagna:"Vrishabha",timing:"08:00–10:30 AM",quality:"excellent",highlights:["Rohini Nakshatra","Best of Season"],rashi_compat:["Mesha","Vrishabha","Karka","Simha"],nak_compat:["Rohini","Mrigashira","Hasta"]},
+      {date:"2026-12-06",day:"Sun",tithi:"Saptami",nakshatra:"Swati",lagna:"Tula",timing:"09:00–11:30 AM",quality:"shubh",highlights:["Swati Nakshatra","Tula Lagna"],rashi_compat:["Tula","Mithuna","Kumbha"],nak_compat:["Swati","Chitra","Anuradha"]},
+    ]},
+  ],
+  namkaran:[
+    {rangeLabel:"January – June 2026",rangeDesc:"Good period for baby naming — avoid Rahu Kalam.",quality:"shubh",avoid:false,dates:[
+      {date:"2026-02-22",day:"Sun",tithi:"Panchami",nakshatra:"Pushya",lagna:"Karka",timing:"10:00 AM–12:00 PM",quality:"excellent",highlights:["PUSHYA NAKSHATRA","Universal auspicious"],rashi_compat:["All rashis"],nak_compat:["All nakshatras"]},
+      {date:"2026-04-05",day:"Sun",tithi:"Saptami",nakshatra:"Rohini",lagna:"Vrishabha",timing:"09:00–11:00 AM",quality:"shubh",highlights:["Rohini Nakshatra","Moon strong"],rashi_compat:["Vrishabha","Karka","Meena"],nak_compat:["Rohini","Hasta","Mrigashira"]},
+      {date:"2026-05-17",day:"Sun",tithi:"Navami",nakshatra:"Hasta",lagna:"Kanya",timing:"08:00–10:30 AM",quality:"shubh",highlights:["Hasta Nakshatra","Mercury strong"],rashi_compat:["Kanya","Makara","Vrishabha"],nak_compat:["Hasta","Rohini","Uttara Phalguni"]},
+    ]},
+  ],
+  business:[
+    {rangeLabel:"January 14, 2026 (Sankranti)",rangeDesc:"Makar Sankranti — Sun enters Makara. Best single day for launching a business.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-01-14",day:"Wed",tithi:"Sankranti",nakshatra:"Pushya",lagna:"Makara",timing:"08:00–10:00 AM",quality:"excellent",highlights:["SANKRANTI","Pushya Nakshatra"],rashi_compat:["Makara","Vrishabha","Kanya","Tula"],nak_compat:["Pushya","Rohini","Hasta"]},
+    ]},
+    {rangeLabel:"March 19 – April 14, 2026 (Ugadi Season)",rangeDesc:"Telugu New Year onwards — Most auspicious time to start a new business.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-03-19",day:"Thu",tithi:"Pratipad (Ugadi)",nakshatra:"Chitra",lagna:"Tula",timing:"07:30–09:00 AM",quality:"excellent",highlights:["UGADI","New Year Energy","Guru Hora"],rashi_compat:["All rashis — Ugadi universal"],nak_compat:["All nakshatras"]},
+      {date:"2026-03-26",day:"Thu",tithi:"Saptami",nakshatra:"Swati",lagna:"Tula",timing:"08:00–10:00 AM",quality:"shubh",highlights:["Swati Nakshatra","Thursday Guru Hora"],rashi_compat:["Tula","Mithuna","Kumbha"],nak_compat:["Swati","Hasta","Rohini"]},
+    ]},
+    {rangeLabel:"November 8, 2026 (Diwali)",rangeDesc:"Diwali Lakshmi Puja — Peak auspiciousness for business launches.",quality:"excellent",avoid:false,dates:[
+      {date:"2026-11-08",day:"Sun",tithi:"Amavasya (Diwali)",nakshatra:"Swati",lagna:"Tula",timing:"06:00–08:00 PM",quality:"excellent",highlights:["DIWALI","Lakshmi Puja","Swati Nakshatra"],rashi_compat:["All rashis — Diwali universal"],nak_compat:["All nakshatras"]},
+    ]},
+  ],
+};
+
+const MUH_EVENTS = [
+  {type:"marriage",icon:"💍",name:"Vivah Muhurat",local:"వివాహ శుభ ముహూర్తం",desc:"Auspicious wedding dates & times",avoid:[{date:"Jul 1 – Nov 1 2026",reason:"Chaturmas — 4 inauspicious months"},{date:"Amavasya dates",reason:"No moon day — avoid weddings"}]},
+  {type:"gruhapravesam",icon:"🏠",name:"Gruha Pravesam",local:"గృహ ప్రవేశం",desc:"Housewarming — entering a new home",avoid:[{date:"Jul 1 – Nov 1 2026",reason:"Chaturmas — avoid Gruha Pravesam"},{date:"Amavasya days",reason:"New moon day — inauspicious"}]},
+  {type:"namkaran",icon:"👶",name:"Namakaranam",local:"నామకరణం",desc:"Baby naming ceremony",avoid:[{date:"Rahu Kalam each day",reason:"Never do Namakaranam during Rahu Kalam"}]},
+  {type:"business",icon:"💼",name:"Vyapar Muhurat",local:"వ్యాపార ముహూర్తం",desc:"Start a business or new venture",avoid:[{date:"Ashtami & Navami tithis",reason:"Avoid starting anything new on these days"}]},
+];
+
+const DAILY_MUH = [
+  {name:"Brahma Muhurat",local:"బ్రహ్మ ముహూర్తం",time:"04:30–06:00 AM",quality:"excellent",icon:"🌅",desc:"Best for meditation & new beginnings"},
+  {name:"Abhijit Muhurat",local:"అభిజిత్ ముహూర్తం",time:"11:45 AM–12:30 PM",quality:"excellent",icon:"☀️",desc:"Midday — powerful for all auspicious works"},
+  {name:"Amrit Kalam",local:"అమృత కాలం",time:"~1 hr (varies daily)",quality:"good",icon:"✨",desc:"Nectar-like period — good for all work"},
+  {name:"Rahu Kalam",local:"రాహు కాలం",time:"",quality:"bad",icon:"🚫",desc:"Avoid starting new work"},
+  {name:"Gulika Kalam",local:"గులిక కాలం",time:"(varies by day)",quality:"bad",icon:"⚠️",desc:"Inauspicious — avoid auspicious events"},
+  {name:"Yamagandam",local:"యమగండం",time:"(varies by day)",quality:"bad",icon:"🔴",desc:"Avoid travel & new ventures"},
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+const S = {
+  tab: "home",
+  screen: "home", // home | puja | steps
+  region: "All India",
+  selPuja: null,
+  showMust: false,
+  checked: {},
+  currentStep: 0,
+  calRegion: "All India",
+  calYear: new Date().getFullYear(),
+  calMonth: new Date().getMonth(),
+  calView: "list",
+  selDate: null,
+  muhType: "marriage",
+  showKundli: false,
+  brideRashi:"", groomRashi:"", brideNak:"", groomNak:"",
+  userRashi:"", userNak:"",
+  fromDate:"", toDate:"",
+};
+
+// ═══════════════════════════════════════════════════════
+// COMPAT ENGINES
+// ═══════════════════════════════════════════════════════
+function getTaraBala(bN,gN){
+  if(!bN||!gN)return null;
+  const bi=NAKSHATRAS.indexOf(bN),gi=NAKSHATRAS.indexOf(gN);
+  if(bi<0||gi<0)return{pos:0,name:"Unknown",score:3,points:1};
+  const pos=((gi-bi+27)%27)%9+1;
+  const q=TARA_QUALITY[pos]||3;
+  return{pos,name:TARA_NAMES[pos]||"",score:q,points:q===5?3:q===4?3:q===1?0:1};
+}
+function getYoniKuta(bN,gN){
+  if(!bN||!gN)return null;
+  const bY=NAK_YONI[bN],gY=NAK_YONI[gN];
+  if(!bY||!gY)return{score:2,points:2,label:"Neutral Yoni"};
+  if(bY===gY)return{score:4,points:4,label:"Same Yoni — Excellent"};
+  if((FRIEND_YONI[bY]||[]).includes(gY))return{score:3,points:3,label:"Friendly Yoni — Good"};
+  if((ENEMY_YONI[bY]||[]).includes(gY))return{score:1,points:0,label:"Enemy Yoni — Avoid"};
+  return{score:2,points:2,label:"Neutral Yoni"};
+}
+function getBhakoot(bR,gR){
+  if(!bR||!gR)return null;
+  const bk=bR.split(" ")[0],gk=gR.split(" ")[0];
+  const bi=RASHI_LIST.indexOf(bk),gi=RASHI_LIST.indexOf(gk);
+  if(bi<0||gi<0)return null;
+  const p1=((gi-bi+12)%12)+1,p2=((bi-gi+12)%12)+1;
+  if([2,6,8,12].some(x=>x===p1||x===p2)){
+    if(p1===6||p2===6)return{score:2,points:0,label:"Shadashtak (6/8) — Avoid"};
+    return{score:2,points:0,label:`${p1}/${p2} Position — Dosham`};
+  }
+  return{score:5,points:7,label:`${p1}/${p2} Position — Auspicious`};
+}
+function getNadi(bN,gN){
+  if(!bN||!gN)return null;
+  const bNd=NAK_NADI[bN],gNd=NAK_NADI[gN];
+  if(!bNd||!gNd)return{score:3,points:4,label:"Nadi data unavailable"};
+  if(bNd===gNd)return{score:1,points:0,label:`Nadi Dosha — Both ${bNd} (Avoid)`};
+  return{score:5,points:8,label:`${bNd} + ${gNd} — No Nadi Dosha ✓`};
+}
+function getHoroscopeScore(bR,gR,bN,gN){
+  if((!bR&&!bN)||(!gR&&!gN))return null;
+  const bRr=bR||(bN?NAK_RASHI[bN]+" ":"");
+  const gRr=gR||(gN?NAK_RASHI[gN]+" ":"");
+  const tara=getTaraBala(bN,gN);
+  const yoni=getYoniKuta(bN,gN);
+  const bhakoot=getBhakoot(bRr,gRr);
+  const nadi=getNadi(bN,gN);
+  const kutas=[
+    {name:"Varna",max:1,points:1,desc:"Spiritual compatibility"},
+    {name:"Vasya",max:2,points:bRr&&gRr?2:0,desc:"Mutual attraction"},
+    {name:"Tara",max:3,points:tara?tara.points:0,desc:"Destiny & health",detail:tara?tara.name:""},
+    {name:"Yoni",max:4,points:yoni?yoni.points:2,desc:"Physical compatibility",detail:yoni?yoni.label:""},
+    {name:"Graha Maitri",max:5,points:bhakoot?Math.min(5,bhakoot.points):3,desc:"Mind compatibility"},
+    {name:"Gana",max:6,points:3,desc:"Nature & behaviour"},
+    {name:"Bhakoot",max:7,points:bhakoot?bhakoot.points:5,desc:"Family & longevity",detail:bhakoot?bhakoot.label:""},
+    {name:"Nadi",max:8,points:nadi?nadi.points:5,desc:"Health of progeny",detail:nadi?nadi.label:""},
+  ];
+  const total=kutas.reduce((s,k)=>s+k.points,0);
+  const overall=total>=28?5:total>=22?4:total>=18?3:2;
+  const labels={5:{label:"Excellent",emoji:"💚",color:"#166534",bg:"#dcfce7",border:"#86efac"},4:{label:"Good",emoji:"🟡",color:"#854d0e",bg:"#fef9c3",border:"#fde047"},3:{label:"Neutral",emoji:"🔵",color:"#1e40af",bg:"#dbeafe",border:"#93c5fd"},2:{label:"Needs Review",emoji:"🔴",color:"#991b1b",bg:"#fee2e2",border:"#fca5a5"}};
+  return{total,kutas,overall,overallInfo:labels[overall]};
+}
+function getMuhuratCompat(bR,gR,bN,gN,entry){
+  if(!entry||(!bR&&!gR&&!bN&&!gN))return{msg:"",level:5};
+  const rc=entry.rashi_compat||[],nc=entry.nak_compat||[];
+  const univR=rc.some(r=>r.includes("All")),univN=nc.some(n=>n.includes("All"));
+  const msgs=[];let level=5;
+  if(bR||gR){
+    if(univR){msgs.push("✨ Universal rashi muhurat");}
+    else{
+      const bk=(bR||"").split(" ")[0],gk=(gR||"").split(" ")[0];
+      const bOk=!bR||rc.some(r=>r.includes(bk)),gOk=!gR||rc.some(r=>r.includes(gk));
+      if(bOk&&gOk)msgs.push("✅ Both rashis compatible");
+      else if(bOk){msgs.push("⚠️ Groom rashi needs review");level=3;}
+      else if(gOk){msgs.push("⚠️ Bride rashi needs review");level=3;}
+      else{msgs.push("⚠️ Both rashis need astrologer review");level=2;}
+    }
+  }
+  if(bN||gN){
+    if(univN){msgs.push("✨ Universal nakshatra muhurat");}
+    else{
+      const bOk=!bN||nc.some(n=>n.includes(bN)),gOk=!gN||nc.some(n=>n.includes(gN));
+      if(bOk&&gOk)msgs.push("⭐ Both nakshatras align");
+      else{msgs.push("⚠️ Nakshatra mismatch — consult Jyotishi");level=Math.min(level,2);}
+    }
+  }
+  return{msg:msgs.join(" · "),level};
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function fmtDate(s){
+  if(!s)return s;
+  const clean=s.split(" ")[0];
+  try{const d=new Date(clean+"T00:00:00");if(isNaN(d.getTime()))return s;return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;}catch(e){return s;}
+}
+function qBadge(q){
+  const m={excellent:{cls:"q-excellent",l:"⭐ Excellent"},shubh:{cls:"q-shubh",l:"✅ Shubh"},good:{cls:"q-good",l:"👍 Good"},bad:{cls:"q-bad",l:"❌ Avoid"},avoid:{cls:"q-avoid",l:"🚫 Avoid Period"}}[q]||{cls:"q-good",l:q};
+  return `<span class="q-badge ${m.cls}">${m.l}</span>`;
+}
+function el(tag, attrs, ...children){
+  const e=document.createElement(tag);
+  if(attrs)Object.entries(attrs).forEach(([k,v])=>{if(k==="style"&&typeof v==="object"){Object.assign(e.style,v);}else if(k.startsWith("on")){e.addEventListener(k.slice(2).toLowerCase(),v);}else{e.setAttribute(k,v);}});
+  children.forEach(c=>{if(c==null||c===false)return;e.append(typeof c==="string"||typeof c==="number"?String(c):c);});
+  return e;
+}
+function regionMatch(regions,region){return region==="All India"?true:regions.includes("All India")||regions.includes(region);}
+
+// ═══════════════════════════════════════════════════════
+// RENDER ENGINE
+// ═══════════════════════════════════════════════════════
+function render(){
+  const content=document.getElementById("content");
+  const btnBack=document.getElementById("btn-back");
+  // Back button
+  if((S.tab==="home"&&S.screen!=="home")){btnBack.classList.remove("hide");}
+  else{btnBack.classList.add("hide");}
+  // Tab active
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===S.tab));
+  // Render
+  content.innerHTML="";
+  let frag;
+  if(S.tab==="home"){
+    if(S.screen==="home")frag=renderHome();
+    else if(S.screen==="puja")frag=renderPuja();
+    else if(S.screen==="steps")frag=renderSteps();
+  } else if(S.tab==="calendar"){frag=renderCalendar();}
+  else if(S.tab==="muhurat"){frag=renderMuhurat();}
+  else if(S.tab==="saved"){frag=renderSaved();}
+  else if(S.tab==="settings"){frag=renderSettings();}
+  if(frag)content.appendChild(frag);
+  content.scrollTop=0;
+}
+
+// ═══════════════════════════════════════════════════════
+// HOME SCREEN
+// ═══════════════════════════════════════════════════════
+function renderHome(){
+  const f=document.createDocumentFragment();
+  // Hero
+  const hero=document.createElement("div");
+  hero.className="hero-card";
+  hero.style.cssText="background:linear-gradient(135deg,#7c2d12,#c2410c);box-shadow:0 8px 30px rgba(194,65,12,0.3);";
+  hero.innerHTML=`<div class="hero-icon">🙏</div><div class="hero-title">Shuru Karein</div><div class="hero-sub" style="color:#fcd9b5;">Select your region & puja to begin</div>`;
+  f.appendChild(hero);
+
+  // Region
+  const rl=document.createElement("div");rl.className="section-label";rl.textContent="🗺️ Select Region";f.appendChild(rl);
+  const rp=document.createElement("div");rp.className="region-pills";
+  REGIONS.forEach(r=>{
+    const b=document.createElement("button");
+    b.className="pill"+(S.region===r?" active":"");
+    b.textContent=(r==="Andhra Pradesh"?"🔱 "+r:r==="Telangana"?"🏛️ "+r:r);
+    b.onclick=()=>{S.region=r;render();};
+    rp.appendChild(b);
+  });
+  f.appendChild(rp);
+
+  // Pujas
+  const pl=document.createElement("div");pl.className="section-label";pl.textContent=`🪔 Pujas for ${S.region}`;f.appendChild(pl);
+  const filtered=PUJAS.filter(p=>S.region==="All India"||p.regions.includes(S.region));
+  filtered.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="puja-card";
+    card.style.gap="14px";
+    card.innerHTML=`
+      <div class="puja-icon-wrap">${p.icon}</div>
+      <div style="flex:1;">
+        <div class="puja-name">${p.name}</div>
+        <div class="puja-sub">${p.nameHindi}</div>
+        <div class="puja-desc">${p.desc}</div>
+      </div>
+      <div style="color:#c2410c;font-size:20px;">›</div>
+    `;
+    card.onclick=()=>{S.selPuja=p;S.screen="puja";S.checked={};S.currentStep=0;S.showMust=false;render();};
+    f.appendChild(card);
+  });
+  return f;
+}
+
+// ═══════════════════════════════════════════════════════
+// PUJA DETAIL
+// ═══════════════════════════════════════════════════════
+function renderPuja(){
+  const p=S.selPuja;
+  const f=document.createDocumentFragment();
+  const tot=p.items.length;
+  const chk=p.items.filter(i=>S.checked[i.name]).length;
+  const mT=p.items.filter(i=>i.mandatory).length;
+  const mC=p.items.filter(i=>i.mandatory&&S.checked[i.name]).length;
+  const pct=tot?Math.round(chk/tot*100):0;
+  const steps=PUJA_STEPS[p.id]||[];
+
+  // Header
+  const hdr=document.createElement("div");
+  hdr.style.cssText="background:linear-gradient(135deg,#1c1917,#44403c);border-radius:18px;padding:18px;margin-bottom:14px;text-align:center;";
+  hdr.innerHTML=`<div style="font-size:42px;margin-bottom:4px;">${p.icon}</div><div style="color:#fff;font-size:18px;font-weight:bold;">${p.name}</div><div style="color:#d97706;font-size:12px;margin-top:2px;">${p.nameHindi}</div>`;
+  f.appendChild(hdr);
+
+  // Two action boxes
+  const twoCol=document.createElement("div");twoCol.className="two-col";twoCol.style.marginBottom="14px";
+  twoCol.innerHTML=`
+    <div class="action-box" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fbbf24;cursor:default;">
+      <div style="font-size:22px;margin-bottom:4px;">🛒</div>
+      <div style="font-weight:bold;color:#92400e;font-size:12px;">Samagri List</div>
+      <div style="color:#b45309;font-size:10px;margin-top:2px;">${mC}/${mT} ready</div>
+    </div>
+  `;
+  const stepsBox=document.createElement("div");
+  stepsBox.className="action-box";
+  stepsBox.style.cssText="background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-color:#a78bfa;cursor:pointer;";
+  stepsBox.innerHTML=`<div style="font-size:22px;margin-bottom:4px;">📖</div><div style="font-weight:bold;color:#4a1d96;font-size:12px;">How to Do Puja</div><div style="color:#7c3aed;font-size:10px;margin-top:2px;">${steps.length} steps guide</div>`;
+  stepsBox.onclick=()=>{S.screen="steps";render();};
+  twoCol.appendChild(stepsBox);
+  f.appendChild(twoCol);
+
+  // Progress
+  const progDiv=document.createElement("div");progDiv.className="prog-wrap";
+  progDiv.innerHTML=`
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-size:12px;color:#7c2d12;font-weight:bold;">🛒 Collection Progress</span>
+      <span style="font-size:12px;font-weight:bold;">${chk}/${tot} ${pct===100?"🎉":""}</span>
+    </div>
+    <div class="prog-bar-bg"><div class="prog-bar" style="background:linear-gradient(90deg,${pct===100?"#16a34a":"#c2410c"},${pct===100?"#15803d":"#ea580c"});width:${pct}%;"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:#6b7280;">
+      <span>★ Mandatory: ${mC}/${mT}</span><span>◇ Optional: ${chk-mC}/${tot-mT}</span>
+    </div>
+  `;
+  f.appendChild(progDiv);
+
+  // Buttons row
+  const brow=document.createElement("div");brow.style.cssText="display:flex;gap:8px;margin-bottom:10px;";
+  const mustBtn=document.createElement("button");
+  mustBtn.className="btn btn-outline";mustBtn.style.cssText=`flex:1;padding:9px;font-size:11px;border-color:${S.showMust?"#dc2626":"#fed7aa"};background:${S.showMust?"#dc2626":"#fff"};color:${S.showMust?"#fff":"#374151"};border-radius:10px;`;
+  mustBtn.textContent=S.showMust?"★ Must-Haves Only":"Show All Items";
+  mustBtn.onclick=()=>{S.showMust=!S.showMust;render();};
+  const shareBtn=document.createElement("button");
+  shareBtn.className="btn btn-primary";shareBtn.style.cssText="flex:1;padding:9px;font-size:12px;border-radius:10px;";
+  shareBtn.textContent="📤 Share";shareBtn.onclick=openShare;
+  brow.appendChild(mustBtn);brow.appendChild(shareBtn);f.appendChild(brow);
+
+  // Legend
+  const leg=document.createElement("div");leg.style.cssText="display:flex;gap:8px;margin-bottom:10px;align-items:center;";
+  leg.innerHTML=`<span class="badge badge-must">★ MUST</span><span class="badge badge-opt">◇ OPTIONAL</span><span style="font-size:10px;color:#6b7280;">Tap item to check ✔</span>`;
+  f.appendChild(leg);
+
+  // Items
+  const items=p.items.filter(it=>!S.showMust||it.mandatory);
+  items.forEach(it=>{
+    const ck=!!S.checked[it.name];
+    const card=document.createElement("div");
+    card.className="samagri-item"+(ck?" checked":"")+(it.mandatory&&!ck?" mandatory":"");
+    card.style.display="flex";card.style.gap="12px";card.style.alignItems="flex-start";
+    // emoji
+    const ew=document.createElement("div");ew.className="item-emoji-wrap";
+    const eg=document.createElement("div");
+    eg.className="item-emoji"+(ck?" checked-bg":it.mandatory?" mandatory-bg":"");
+    eg.textContent=it.emoji;
+    const chkDot=document.createElement("div");
+    chkDot.className="item-check"+(ck?" done":"");
+    chkDot.textContent=ck?"✓":"";
+    ew.appendChild(eg);ew.appendChild(chkDot);
+    card.appendChild(ew);
+    // text
+    const td=document.createElement("div");td.style.flex="1";
+    const nm=document.createElement("div");
+    nm.style.cssText="display:flex;align-items:center;gap:5px;flex-wrap:wrap;";
+    nm.innerHTML=`<span style="font-weight:bold;color:${ck?"#15803d":"#1c1917"};font-size:13px;text-decoration:${ck?"line-through":"none"};">${it.name}</span>${it.mandatory?'<span class="badge badge-must">★ MUST</span>':'<span class="badge badge-opt">◇ OPT</span>'}`;
+    td.appendChild(nm);
+    // lang tags
+    if(it.langs){
+      const lt=document.createElement("div");lt.className="lang-tags";
+      Object.entries(it.langs).forEach(([lang,name])=>{
+        const t=document.createElement("div");t.className="lang-tag";
+        t.style.border=`1.5px solid ${LANG_COLORS[lang]||"#d1d5db"}`;
+        t.innerHTML=`<span class="lang-name" style="color:${LANG_COLORS[lang]||"#6b7280"};">${lang}</span><span class="lang-val">${name}</span>`;
+        lt.appendChild(t);
+      });
+      td.appendChild(lt);
+    }
+    card.appendChild(td);
+    card.onclick=()=>{S.checked[it.name]=!S.checked[it.name];render();};
+    f.appendChild(card);
+  });
+
+  // Summary box
+  const summ=document.createElement("div");
+  summ.style.cssText="background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:14px;padding:12px 16px;margin-top:4px;border:1.5px solid #fbbf24;text-align:center;";
+  summ.innerHTML=`<div style="font-weight:bold;color:#92400e;font-size:12px;">🛒 ${mT} Mandatory · ${tot-mT} Optional</div>`;
+  f.appendChild(summ);
+
+  // Steps banner
+  const sb=document.createElement("div");
+  sb.style.cssText="background:linear-gradient(135deg,#4a1d96,#7c3aed);border-radius:14px;padding:16px;margin-top:10px;cursor:pointer;display:flex;align-items:center;gap:14px;";
+  sb.innerHTML=`<div style="font-size:36px;">📖</div><div><div style="color:#fff;font-weight:bold;font-size:15px;">How to do ${p.name}?</div><div style="color:#ddd6fe;font-size:12px;margin-top:2px;">Step-by-step guide · ${steps.length} clear steps</div></div><div style="color:#ddd6fe;font-size:20px;margin-left:auto;">›</div>`;
+  sb.onclick=()=>{S.screen="steps";render();};
+  f.appendChild(sb);
+
+  const shareBtn2=document.createElement("button");
+  shareBtn2.className="btn btn-primary";shareBtn2.style.cssText="width:100%;margin-top:12px;padding:13px;font-size:14px;border-radius:10px;";
+  shareBtn2.textContent="📤 Share My Checklist";shareBtn2.onclick=openShare;
+  f.appendChild(shareBtn2);
+
+  return f;
+}
+
+// ═══════════════════════════════════════════════════════
+// STEPS SCREEN
+// ═══════════════════════════════════════════════════════
+function renderSteps(){
+  const p=S.selPuja;
+  const steps=PUJA_STEPS[p.id]||[];
+  const f=document.createDocumentFragment();
+
+  // Header
+  const hdr=document.createElement("div");
+  hdr.style.cssText="background:linear-gradient(135deg,#4a1d96,#7c3aed);border-radius:18px;padding:18px;margin-bottom:16px;text-align:center;";
+  hdr.innerHTML=`<div style="font-size:38px;margin-bottom:4px;">${p.icon}</div><div style="color:#fff;font-size:17px;font-weight:bold;">How to do ${p.name}</div><div style="color:#ddd6fe;font-size:12px;margin-top:2px;">${steps.length} steps · Follow in order</div>`;
+  f.appendChild(hdr);
+
+  // Progress
+  const prog=document.createElement("div");
+  prog.style.cssText="background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:14px;border:1px solid #e9d5ff;box-shadow:0 2px 8px rgba(0,0,0,0.06);";
+  const pct=steps.length?Math.round(S.currentStep/steps.length*100):0;
+  prog.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:#4a1d96;font-weight:bold;">📖 Puja Progress</span><span style="font-size:12px;font-weight:bold;">${S.currentStep}/${steps.length} steps done</span></div><div class="prog-bar-bg"><div class="prog-bar" style="background:linear-gradient(90deg,#7c3aed,#6d28d9);width:${pct}%;"></div></div>`;
+  f.appendChild(prog);
+
+  // Step dots
+  const dots=document.createElement("div");dots.className="step-dots";
+  steps.forEach((s,i)=>{
+    const d=document.createElement("div");
+    d.className="step-dot"+(i<S.currentStep?" done-dot":i===S.currentStep?" cur-dot":"");
+    d.textContent=i<S.currentStep?"✓":i+1;
+    d.onclick=()=>{document.getElementById(`step-${i}`)?.scrollIntoView({behavior:"smooth"});};
+    dots.appendChild(d);
+  });
+  f.appendChild(dots);
+
+  // Step cards
+  steps.forEach((s,i)=>{
+    const card=document.createElement("div");
+    card.className="step-card"+(i<S.currentStep?" done":i===S.currentStep?" current":"");
+    card.id=`step-${i}`;
+    card.style.display="flex";card.style.gap="12px";card.style.alignItems="flex-start";
+    const sn=document.createElement("div");
+    sn.className="step-num"+(i<S.currentStep?" done":i===S.currentStep?" current":"");
+    sn.textContent=i<S.currentStep?"✓":i+1;
+    card.appendChild(sn);
+    const body=document.createElement("div");body.style.flex="1";
+    body.innerHTML=`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;"><span style="font-size:18px;">${s.emoji}</span><span style="font-weight:bold;color:${i<S.currentStep?"#15803d":i===S.currentStep?"#7c2d12":"#374151"};font-size:14px;">${s.title}</span><span style="background:#f3f4f6;color:#6b7280;border-radius:6px;padding:1px 6px;font-size:10px;">⏱ ${s.time}</span></div><div style="font-size:13px;color:#374151;line-height:1.6;">${s.desc}</div>`;
+    if(i===S.currentStep){
+      const nb=document.createElement("button");
+      nb.className="btn btn-primary";nb.style.cssText="margin-top:10px;padding:8px 20px;font-size:12px;border-radius:10px;";
+      nb.textContent=i===steps.length-1?"🎉 Puja Complete!":"✓ Done, Next Step →";
+      nb.onclick=()=>{S.currentStep=Math.min(S.currentStep+1,steps.length);render();};
+      body.appendChild(nb);
+    }
+    card.appendChild(body);
+    f.appendChild(card);
+  });
+
+  if(S.currentStep===steps.length){
+    const complete=document.createElement("div");
+    complete.style.cssText="background:linear-gradient(135deg,#14532d,#16a34a);border-radius:16px;padding:20px;text-align:center;margin-top:8px;";
+    complete.innerHTML=`<div style="font-size:40px;margin-bottom:8px;">🎉</div><div style="color:#fff;font-weight:bold;font-size:16px;">Puja Completed!</div><div style="color:#bbf7d0;font-size:12px;margin-top:4px;">May Lord bless you and your family 🙏</div>`;
+    const rb=document.createElement("button");rb.className="btn";rb.style.cssText="margin-top:12px;padding:8px 20px;font-size:12px;border-radius:10px;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);";
+    rb.textContent="🔄 Restart";rb.onclick=()=>{S.currentStep=0;render();};
+    complete.appendChild(rb);f.appendChild(complete);
+  }
+  return f;
+}
+
+// ═══════════════════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════════════════
+function renderCalendar(){
+  const f=document.createDocumentFragment();
+
+  // Hero
+  const hdr=document.createElement("div");
+  hdr.style.cssText="background:linear-gradient(135deg,#1e3a5f,#2563eb);border-radius:20px;padding:18px;text-align:center;margin-bottom:16px;box-shadow:0 8px 30px rgba(37,99,235,0.3);";
+  hdr.innerHTML=`<div style="font-size:36px;margin-bottom:4px;">📅</div><div style="color:#fff;font-size:18px;font-weight:bold;">Festival Calendar</div><div style="color:#bfdbfe;font-size:11px;">2025 · 2026 · 2027 — All Regions</div>`;
+  f.appendChild(hdr);
+
+  // Month/Year nav
+  const nav=document.createElement("div");nav.style.cssText="display:flex;align-items:center;gap:8px;margin-bottom:12px;";
+  const prevBtn=document.createElement("button");
+  prevBtn.className="btn btn-primary";prevBtn.style.cssText="padding:8px 12px;font-size:15px;border-radius:10px;flex-shrink:0;";prevBtn.textContent="‹";
+  prevBtn.onclick=()=>{if(S.calMonth===0){S.calMonth=11;S.calYear--;}else S.calMonth--;S.selDate=null;render();};
+  const monthSel=document.createElement("select");
+  monthSel.style.cssText="flex:1;padding:8px 28px 8px 10px;border:1.5px solid #bfdbfe;border-radius:10px;background:#fff;color:#1e3a5f;font-weight:bold;font-size:13px;font-family:Georgia,serif;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cpath fill=%22%231e3a5f%22 d=%22M6 8L1 3h10z%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;";
+  MONTHS.forEach((m,i)=>{const o=document.createElement("option");o.value=i;o.textContent=m;if(i===S.calMonth)o.selected=true;monthSel.appendChild(o);});
+  monthSel.onchange=e=>{S.calMonth=parseInt(e.target.value);S.selDate=null;render();};
+  const yearSel=document.createElement("select");
+  yearSel.style.cssText="width:90px;padding:8px 28px 8px 10px;border:1.5px solid #bfdbfe;border-radius:10px;background:#fff;color:#1e3a5f;font-weight:bold;font-size:13px;font-family:Georgia,serif;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cpath fill=%22%231e3a5f%22 d=%22M6 8L1 3h10z%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;";
+  [2025,2026,2027].forEach(y=>{const o=document.createElement("option");o.value=y;o.textContent=y;if(y===S.calYear)o.selected=true;yearSel.appendChild(o);});
+  yearSel.onchange=e=>{S.calYear=parseInt(e.target.value);S.selDate=null;render();};
+  const nextBtn=document.createElement("button");
+  nextBtn.className="btn btn-primary";nextBtn.style.cssText="padding:8px 12px;font-size:15px;border-radius:10px;flex-shrink:0;";nextBtn.textContent="›";
+  nextBtn.onclick=()=>{if(S.calMonth===11){S.calMonth=0;S.calYear++;}else S.calMonth++;S.selDate=null;render();};
+  const selWrap=document.createElement("div");selWrap.style.cssText="display:flex;gap:6px;flex:1;";
+  selWrap.appendChild(monthSel);selWrap.appendChild(yearSel);
+  nav.appendChild(prevBtn);nav.appendChild(selWrap);nav.appendChild(nextBtn);
+  f.appendChild(nav);
+
+  // Region filter
+  const rp=document.createElement("div");rp.style.cssText="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;";
+  REGIONS.forEach(r=>{
+    const b=document.createElement("button");
+    b.style.cssText=`padding:4px 10px;border-radius:20px;border:1.5px solid ${S.calRegion===r?"#2563eb":"#bfdbfe"};background:${S.calRegion===r?"#2563eb":"#fff"};color:${S.calRegion===r?"#fff":"#1e40af"};font-size:10px;cursor:pointer;font-weight:${S.calRegion===r?"bold":"normal"};font-family:Georgia,serif;`;
+    b.textContent=(r==="Andhra Pradesh"?"🔱 AP":r==="Telangana"?"🏛️ TG":r);
+    b.onclick=()=>{S.calRegion=r;S.selDate=null;render();};
+    rp.appendChild(b);
+  });
+  f.appendChild(rp);
+
+  // View toggle
+  const vt=document.createElement("div");vt.style.cssText="display:flex;gap:8px;margin-bottom:12px;";
+  ["list","grid"].forEach(v=>{
+    const b=document.createElement("button");
+    b.className="btn";b.style.cssText=`flex:1;padding:8px;font-size:12px;border-radius:10px;border:1.5px solid #bfdbfe;background:${S.calView===v?"#1e3a5f":"#eff6ff"};color:${S.calView===v?"#fff":"#1d4ed8"};`;
+    b.textContent=v==="list"?"📋 List View":"📆 Grid View";
+    b.onclick=()=>{S.calView=v;render();};
+    vt.appendChild(b);
+  });
+  f.appendChild(vt);
+
+  // GRID VIEW
+  if(S.calView==="grid"){
+    const gridWrap=document.createElement("div");
+    gridWrap.style.cssText="background:#fff;border-radius:14px;padding:12px;border:1px solid #bfdbfe;margin-bottom:12px;";
+    // Build fest map
+    const festMap={};
+    FESTIVALS.forEach(fe=>{
+      const d=new Date(fe.date+"T00:00:00");
+      if(d.getFullYear()===S.calYear&&d.getMonth()===S.calMonth&&regionMatch(fe.regions,S.calRegion)){
+        const k=d.getDate();
+        if(!festMap[k])festMap[k]=[];
+        festMap[k].push(fe);
+      }
+    });
+    const grid=document.createElement("div");grid.className="cal-grid";
+    DAYS_SHORT.forEach(d=>{const h=document.createElement("div");h.className="cal-header-cell";h.textContent=d;grid.appendChild(h);});
+    const firstDay=new Date(S.calYear,S.calMonth,1).getDay();
+    const daysInMonth=new Date(S.calYear,S.calMonth+1,0).getDate();
+    const today=new Date();
+    for(let i=0;i<firstDay;i++){const e=document.createElement("div");e.className="cal-cell empty";grid.appendChild(e);}
+    for(let d=1;d<=daysInMonth;d++){
+      const cell=document.createElement("div");
+      const isToday=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
+      const isSel=S.selDate&&S.selDate.getDate()===d&&S.selDate.getMonth()===S.calMonth&&S.selDate.getFullYear()===S.calYear;
+      const hasFest=!!festMap[d];
+      cell.className="cal-cell"+(isToday?" today":"")+(hasFest?" has-fest":"")+(isSel?" selected":"");
+      cell.innerHTML=`<span style="font-size:12px;">${d}</span>`;
+      if(hasFest&&!isSel){
+        const dots=document.createElement("div");dots.style.cssText="display:flex;gap:1px;flex-wrap:wrap;justify-content:center;";
+        festMap[d].slice(0,2).forEach(fe=>{const dot=document.createElement("span");dot.style.fontSize="8px";dot.textContent=fe.icon;dots.appendChild(dot);});
+        cell.appendChild(dots);
+      }
+      cell.onclick=()=>{S.selDate=new Date(S.calYear,S.calMonth,d);render();};
+      grid.appendChild(cell);
+    }
+    gridWrap.appendChild(grid);f.appendChild(gridWrap);
+
+    // Selected date fests
+    if(S.selDate){
+      const selFests=FESTIVALS.filter(fe=>{
+        const d=new Date(fe.date+"T00:00:00");
+        return d.getDate()===S.selDate.getDate()&&d.getMonth()===S.selDate.getMonth()&&d.getFullYear()===S.selDate.getFullYear()&&regionMatch(fe.regions,S.calRegion);
+      });
+      const dh=document.createElement("div");dh.style.cssText="font-size:13px;font-weight:bold;color:#1e3a5f;margin-bottom:8px;";
+      dh.textContent=`📅 ${S.selDate.getDate()} ${MONTHS[S.selDate.getMonth()]} ${S.selDate.getFullYear()}`;
+      f.appendChild(dh);
+      if(selFests.length===0){
+        const empty=document.createElement("div");empty.style.cssText="background:#eff6ff;border-radius:12px;padding:14px;text-align:center;color:#6b7280;font-size:12px;";
+        empty.textContent=`No festivals on this date for ${S.calRegion}`;f.appendChild(empty);
+      } else {
+        selFests.forEach(fe=>f.appendChild(makeFestCard(fe)));
+      }
+    }
+  }
+
+  // LIST VIEW
+  if(S.calView==="list"){
+    const fests=FESTIVALS.filter(fe=>{
+      const d=new Date(fe.date+"T00:00:00");
+      return d.getMonth()===S.calMonth&&d.getFullYear()===S.calYear&&regionMatch(fe.regions,S.calRegion);
+    }).sort((a,b)=>new Date(a.date)-new Date(b.date));
+    if(fests.length===0){
+      const empty=document.createElement("div");empty.style.cssText="text-align:center;padding:40px 20px;color:#6b7280;";
+      empty.innerHTML=`<div style="font-size:40px;">🔍</div><div style="margin-top:8px;font-size:12px;">No festivals this month for ${S.calRegion}</div>`;
+      f.appendChild(empty);
+    } else {
+      fests.forEach(fe=>f.appendChild(makeFestCard(fe,true)));
+    }
+  }
+  return f;
+}
+
+function makeFestCard(fe, showDate=false){
+  const d=new Date(fe.date+"T00:00:00");
+  const card=document.createElement("div");
+  card.className="fest-card"+(fe.type==="major"?" major":" medium");
+  card.style.display="flex";
+  if(showDate){
+    const dc=document.createElement("div");dc.className="fest-date-col";
+    dc.innerHTML=`<div style="font-size:22px;">${fe.icon}</div><div style="font-size:13px;font-weight:bold;color:#1e3a5f;">${d.getDate()}</div><div style="font-size:9px;color:#6b7280;">${MONTHS[d.getMonth()].slice(0,3)}</div>`;
+    card.appendChild(dc);
+  }
+  const body=document.createElement("div");body.style.flex="1";
+  const regionTags=fe.regions.filter(r=>r!=="All India").map(r=>`<span class="region-tag" style="background:#eff6ff;color:#1d4ed8;">${r==="Andhra Pradesh"?"🔱 AP":r==="Telangana"?"🏛️ TG":r}</span>`).join("");
+  body.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div style="font-weight:bold;color:#1e3a5f;font-size:13px;">${!showDate?fe.icon+" ":""}${fe.name}</div>
+      ${fe.type==="major"?'<span style="background:#2563eb;color:#fff;border-radius:6px;padding:1px 6px;font-size:8px;font-weight:bold;margin-left:4px;flex-shrink:0;">MAJOR</span>':""}
+    </div>
+    <div style="color:#2563eb;font-size:11px;margin-top:1px;">${fe.local}</div>
+    <div style="margin-top:5px;">${fe.regions.includes("All India")?'<span class="region-tag" style="background:#fef3c7;color:#92400e;">🇮🇳 Pan India</span>':""}${regionTags}</div>
+  `;
+  card.appendChild(body);
+  return card;
+}
+
+// ═══════════════════════════════════════════════════════
+// MUHURAT
+// ═══════════════════════════════════════════════════════
+function renderMuhurat(){
+  const f=document.createDocumentFragment();
+
+  // Hero
+  const hdr=document.createElement("div");
+  hdr.style.cssText="background:linear-gradient(135deg,#4a1d96,#7c3aed);border-radius:20px;padding:20px;text-align:center;margin-bottom:16px;box-shadow:0 8px 30px rgba(124,58,237,0.35);";
+  hdr.innerHTML=`<div style="font-size:40px;margin-bottom:4px;">⏰</div><div style="color:#fff;font-size:20px;font-weight:bold;">Shubh Muhurat</div><div style="color:#ddd6fe;font-size:12px;">శుభ ముహూర్తాలు · Auspicious timings</div>`;
+  f.appendChild(hdr);
+
+  // Daily muhurat
+  const dm=document.createElement("div");dm.className="daily-muh";
+  dm.innerHTML=`<div style="font-weight:bold;color:#4a1d96;font-size:13px;margin-bottom:10px;">🌅 Today — ${TODAY_DAY}</div>`;
+  DAILY_MUH.forEach((m,i)=>{
+    const row=document.createElement("div");row.className="daily-muh-row";
+    row.style.cssText="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:"+(i<DAILY_MUH.length-1?"1px solid #e9d5ff":"none");
+    const timeStr=m.name==="Rahu Kalam"?RAHU_KALAM[TODAY_DAY]:m.time;
+    row.innerHTML=`<span style="font-size:18px;width:24px;flex-shrink:0;">${m.icon}</span><div style="flex:1;"><div style="font-size:12px;font-weight:bold;color:#4a1d96;">${m.name}</div><div style="font-size:10px;color:#7c3aed;">${m.local}</div><div style="font-size:10px;color:#6b7280;">${m.desc}</div></div><div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;font-weight:bold;margin-bottom:3px;">${timeStr}</div>${qBadge(m.quality)}</div>`;
+    dm.appendChild(row);
+  });
+  f.appendChild(dm);
+
+  // Occasion selector
+  const sl=document.createElement("div");sl.className="section-label purple";sl.textContent="📋 Shubh Dates by Occasion";f.appendChild(sl);
+  const occ=document.createElement("div");occ.style.cssText="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;";
+  MUH_EVENTS.forEach(m=>{
+    const b=document.createElement("button");
+    b.style.cssText=`white-space:nowrap;padding:8px 14px;border-radius:20px;border:1.5px solid ${S.muhType===m.type?"#7c3aed":"#d8b4fe"};background:${S.muhType===m.type?"#7c3aed":"#fdf4ff"};color:${S.muhType===m.type?"#fff":"#4a1d96"};font-size:11px;cursor:pointer;font-weight:${S.muhType===m.type?"bold":"normal"};flex-shrink:0;font-family:Georgia,serif;`;
+    b.textContent=`${m.icon} ${m.name}`;b.onclick=()=>{S.muhType=m.type;render();};
+    occ.appendChild(b);
+  });
+  f.appendChild(occ);
+
+  const activeMuh=MUH_EVENTS.find(m=>m.type===S.muhType);
+
+  // Event header
+  const evhdr=document.createElement("div");
+  evhdr.style.cssText="background:linear-gradient(135deg,#fdf4ff,#ede9fe);border-radius:14px;padding:14px;margin-bottom:12px;border:1.5px solid #c4b5fd;display:flex;align-items:center;gap:12px;";
+  evhdr.innerHTML=`<div style="font-size:36px;">${activeMuh.icon}</div><div><div style="font-weight:bold;color:#4a1d96;font-size:15px;">${activeMuh.name}</div><div style="color:#7c3aed;font-size:11px;">${activeMuh.local}</div><div style="color:#6b7280;font-size:11px;margin-top:2px;">${activeMuh.desc}</div></div>`;
+  f.appendChild(evhdr);
+
+  // Kundli form
+  const kf=document.createElement("div");kf.className="compat-form";
+  const ktoggle=document.createElement("div");
+  ktoggle.style.cssText="display:flex;align-items:center;justify-content:space-between;cursor:pointer;"+(S.showKundli?"margin-bottom:12px;":"");
+  ktoggle.innerHTML=`<div><div style="font-weight:bold;color:#92400e;font-size:13px;">🔮 Horoscope Compatibility Check</div><div style="color:#b45309;font-size:10px;margin-top:1px;">${S.muhType==="marriage"?"Enter Rashi + Nakshatra for both bride & groom":"Enter your Rashi & Nakshatra"}</div></div><span style="font-size:18px;color:#d97706;">${S.showKundli?"▲":"▼"}</span>`;
+  ktoggle.onclick=()=>{S.showKundli=!S.showKundli;render();};
+  kf.appendChild(ktoggle);
+
+  if(S.showKundli){
+    if(S.muhType==="marriage"){
+      // Bride & Groom
+      const bBox=document.createElement("div");
+      bBox.style.cssText="background:#fff8f1;border-radius:10px;padding:10px;margin-bottom:10px;border:1px solid #fed7aa;";
+      bBox.innerHTML=`<div style="font-size:11px;font-weight:bold;color:#92400e;margin-bottom:7px;">👰 Bride's Details</div>`;
+      const bGrid=document.createElement("div");bGrid.className="two-col";
+      bGrid.appendChild(makeSelect("Janma Rashi",RASHIS,S.brideRashi,v=>{S.brideRashi=v;render();},"#92400e","form-select"));
+      bGrid.appendChild(makeSelect("Janma Nakshatra",NAKSHATRAS,S.brideNak,v=>{S.brideNak=v;render();},"#92400e","form-select"));
+      bBox.appendChild(bGrid);kf.appendChild(bBox);
+
+      const gBox=document.createElement("div");
+      gBox.style.cssText="background:#f0f7ff;border-radius:10px;padding:10px;margin-bottom:10px;border:1px solid #bfdbfe;";
+      gBox.innerHTML=`<div style="font-size:11px;font-weight:bold;color:#1e40af;margin-bottom:7px;">🤵 Groom's Details</div>`;
+      const gGrid=document.createElement("div");gGrid.className="two-col";
+      gGrid.appendChild(makeSelect("Janma Rashi",RASHIS,S.groomRashi,v=>{S.groomRashi=v;render();},"#1e40af","form-select-blue"));
+      gGrid.appendChild(makeSelect("Janma Nakshatra",NAKSHATRAS,S.groomNak,v=>{S.groomNak=v;render();},"#1e40af","form-select-blue"));
+      gBox.appendChild(gGrid);kf.appendChild(gBox);
+
+      // Score
+      const hs=getHoroscopeScore(S.brideRashi,S.groomRashi,S.brideNak,S.groomNak);
+      if(hs){
+        const sc=document.createElement("div");
+        sc.style.cssText=`background:#fff;border-radius:12px;border:2px solid ${hs.overallInfo.border};overflow:hidden;margin-top:4px;`;
+        const pct2=Math.round(hs.total/36*100);
+        let kutaHTML=hs.kutas.map(k=>{
+          const kp=k.max?Math.round(k.points/k.max*100):0;
+          const kc=kp>=75?"#16a34a":kp>=50?"#ca8a04":kp>=25?"#2563eb":"#dc2626";
+          return `<div class="kuta-row"><div class="kuta-name">${k.name}</div><div class="kuta-bar-bg"><div class="kuta-bar" style="background:${kc};width:${kp}%;"></div></div><div class="kuta-score" style="color:${kc};">${k.points}/${k.max}</div>${k.detail?`<div class="kuta-detail">${k.detail}</div>`:""}</div>`;
+        }).join("");
+        sc.innerHTML=`<div style="background:linear-gradient(135deg,${hs.overallInfo.bg},#fff);padding:12px 14px;border-bottom:1px solid ${hs.overallInfo.border};"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:28px;">${hs.overallInfo.emoji}</span><div style="flex:1;"><div style="font-weight:bold;color:${hs.overallInfo.color};font-size:14px;">Horoscope Score: ${hs.total}/36</div><div style="color:${hs.overallInfo.color};font-size:11px;">${hs.overallInfo.label} Match · Ashta-Koota Analysis</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:bold;color:${hs.overallInfo.color};">${hs.total}</div><div style="font-size:9px;color:${hs.overallInfo.color};">/ 36 Gunas</div></div></div><div style="margin-top:8px;background:#e5e7eb;border-radius:999px;height:7px;overflow:hidden;"><div style="background:${hs.overallInfo.border};width:${pct2}%;height:100%;border-radius:999px;"></div></div></div><div style="padding:10px 14px;"><div style="font-size:10px;font-weight:bold;color:#374151;margin-bottom:7px;">Ashta-Koota (8 Kuta) Breakdown</div>${kutaHTML}${hs.total<18?'<div style="margin-top:8px;padding:6px 8px;background:#fee2e2;border-radius:7px;font-size:10px;color:#991b1b;font-weight:bold;">⚠️ Score below 18 — Consult a qualified Jyotishi before proceeding</div>':""}${hs.total>=28?'<div style="margin-top:8px;padding:6px 8px;background:#dcfce7;border-radius:7px;font-size:10px;color:#166534;font-weight:bold;">✅ Highly auspicious match!</div>':""}</div>`;
+        kf.appendChild(sc);
+      } else {
+        const hint=document.createElement("div");hint.style.cssText="font-size:10px;color:#92400e;padding:6px 8px;background:rgba(146,64,14,0.07);border-radius:8px;";hint.textContent="💡 Enter at least one field above to see compatibility score";kf.appendChild(hint);
+      }
+    } else {
+      const ugrid=document.createElement("div");ugrid.className="two-col";ugrid.style.marginBottom="8px;";
+      ugrid.appendChild(makeSelect("🌟 Your Rashi",RASHIS,S.userRashi,v=>{S.userRashi=v;render();},"#92400e","form-select"));
+      ugrid.appendChild(makeSelect("⭐ Your Nakshatra",NAKSHATRAS,S.userNak,v=>{S.userNak=v;render();},"#92400e","form-select"));
+      kf.appendChild(ugrid);
+    }
+    const disc=document.createElement("div");disc.style.cssText="margin-top:8px;padding:6px 8px;background:rgba(146,64,14,0.07);border-radius:7px;font-size:9px;color:#92400e;";disc.textContent="💡 Scores are indicative. For complete Kundli analysis, consult a qualified Jyotishi.";kf.appendChild(disc);
+  }
+  f.appendChild(kf);
+
+  // Date range filter
+  const drf=document.createElement("div");drf.style.cssText="background:#f0f9ff;border-radius:14px;padding:12px 14px;margin-bottom:12px;border:1.5px solid #bae6fd;";
+  drf.innerHTML=`<div style="font-weight:bold;color:#0c4a6e;font-size:12px;margin-bottom:8px;">📅 Filter by Date Range</div>`;
+  const dfg=document.createElement("div");dfg.className="two-col";
+  const fd=document.createElement("div");fd.innerHTML=`<label style="font-size:10px;color:#0369a1;font-weight:bold;display:block;margin-bottom:3px;">From Date</label>`;
+  const fdi=document.createElement("input");fdi.type="date";fdi.value=S.fromDate;fdi.min="2026-01-01";fdi.max="2027-12-31";
+  fdi.onchange=e=>{S.fromDate=e.target.value;render();};fd.appendChild(fdi);
+  const td=document.createElement("div");td.innerHTML=`<label style="font-size:10px;color:#0369a1;font-weight:bold;display:block;margin-bottom:3px;">To Date</label>`;
+  const tdi=document.createElement("input");tdi.type="date";tdi.value=S.toDate;tdi.min="2026-01-01";tdi.max="2027-12-31";
+  tdi.onchange=e=>{S.toDate=e.target.value;render();};td.appendChild(tdi);
+  dfg.appendChild(fd);dfg.appendChild(td);drf.appendChild(dfg);
+  if(S.fromDate||S.toDate){const cb=document.createElement("button");cb.style.cssText="margin-top:8px;padding:4px 12px;border-radius:8px;border:1px solid #7dd3fc;background:#fff;color:#0369a1;font-size:10px;cursor:pointer;font-family:Georgia,serif;";cb.textContent="✕ Clear filter";cb.onclick=()=>{S.fromDate="";S.toDate="";render();};drf.appendChild(cb);}
+  f.appendChild(drf);
+
+  // Shubh date ranges
+  const ranges=SHUBH_DATES[S.muhType]||[];
+  ranges.forEach(rng=>{
+    if(rng.avoid){
+      const ac=document.createElement("div");ac.className="range-card avoid-range";ac.style.marginBottom="12px;";
+      ac.innerHTML=`<div style="display:flex;gap:10px;align-items:center;"><span style="font-size:20px;">🚫</span><div><div style="font-weight:bold;color:#991b1b;font-size:13px;">${rng.rangeLabel}</div><div style="color:#7f1d1d;font-size:11px;margin-top:2px;">${rng.rangeDesc}</div></div></div>`;
+      f.appendChild(ac);return;
+    }
+    const filteredDates=rng.dates.filter(d=>{
+      if(S.fromDate&&d.date<S.fromDate)return false;
+      if(S.toDate&&d.date>S.toDate)return false;
+      return true;
+    });
+    if(filteredDates.length===0&&(S.fromDate||S.toDate))return;
+    const rc=document.createElement("div");rc.className=`range-card ${rng.quality}`;rc.style.marginBottom="16px;";
+    rc.innerHTML=`<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;"><div style="flex:1;"><div style="font-weight:bold;color:#14532d;font-size:13px;">🗓️ ${rng.rangeLabel}</div><div style="color:#374151;font-size:11px;margin-top:3px;line-height:1.5;">${rng.rangeDesc}</div></div>${qBadge(rng.quality)}</div><div style="margin-top:6px;font-size:10px;color:#166534;font-weight:bold;">${filteredDates.length} auspicious date${filteredDates.length!==1?"s":""} in this window</div>`;
+    f.appendChild(rc);
+
+    const dateWrap=document.createElement("div");dateWrap.style.cssText="padding-left:14px;border-left:2px solid #bbf7d0;";
+    filteredDates.forEach(u=>{
+      let compat;
+      if(S.muhType==="marriage"){compat=getMuhuratCompat(S.brideRashi,S.groomRashi,S.brideNak,S.groomNak,u);}
+      else if(S.userRashi||S.userNak){
+        const rc2=u.rashi_compat||[],nc2=u.nak_compat||[];
+        const msgs=[];let lv=5;
+        if(S.userRashi){const uk=S.userRashi.split(" ")[0];const ok=rc2.some(r=>r.includes("All")||r.includes(uk));if(ok)msgs.push("✅ Your rashi compatible");else{msgs.push("⚠️ Rashi mismatch");lv=3;}}
+        if(S.userNak){const ok=nc2.some(n=>n.includes("All")||n.includes(S.userNak));if(ok)msgs.push("⭐ Your nakshatra aligns");else{msgs.push("⚠️ Nakshatra needs review");lv=Math.min(lv,3);}}
+        compat={msg:msgs.join(" · "),level:lv};
+      } else {compat={msg:"",level:5};}
+
+      const dc=document.createElement("div");dc.className="muh-card";dc.style.cssText=`margin-left:0;border-left:4px solid ${u.quality==="excellent"?"#15803d":"#16a34a"};`;
+      const pillsHTML=[
+        u.tithi?`<span class="panchang-pill" style="background:#e0f2fe;color:#0369a1;">🌙 ${u.tithi}</span>`:"",
+        `<span class="panchang-pill" style="background:#fef9c3;color:#854d0e;">⭐ ${u.nakshatra}</span>`,
+        u.lagna?`<span class="panchang-pill" style="background:#f0fdf4;color:#166534;">↑ ${u.lagna}</span>`:"",
+        `<span class="panchang-pill" style="background:#fdf4ff;color:#6b21a8;">🕐 ${u.timing}</span>`,
+      ].join("");
+      const hiHTML=(u.highlights||[]).map(h=>`<span style="background:linear-gradient(135deg,#14532d,#166534);color:#d1fae5;border-radius:10px;padding:2px 7px;font-size:8px;font-weight:bold;">${h}</span>`).join(" ");
+      const compatHTML=compat.msg?`<div style="margin-top:5px;padding:4px 7px;border-radius:6px;background:${compat.level===5?"#f0fdf4":compat.level===3?"#fff7ed":"#fff1f2"};border:1px solid ${compat.level===5?"#86efac":compat.level===3?"#fbbf24":"#fca5a5"};font-size:9px;color:${compat.level===5?"#166534":compat.level===3?"#92400e":"#991b1b"};font-weight:bold;">${compat.msg}</div>`:"";
+      dc.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;"><div style="flex:1;"><div style="font-weight:bold;font-size:13px;color:#14532d;">${fmtDate(u.date)} (${u.day})</div><div style="margin-top:5px;">${pillsHTML}</div>${hiHTML?`<div style="margin-top:5px;">${hiHTML}</div>`:""}${compatHTML}</div>${qBadge(u.quality)}</div>`;
+      dateWrap.appendChild(dc);
+    });
+    f.appendChild(dateWrap);
+  });
+
+  // Avoid rules
+  if(activeMuh.avoid&&activeMuh.avoid.length>0){
+    const avl=document.createElement("div");avl.style.cssText="font-size:12px;font-weight:bold;color:#991b1b;margin-bottom:6px;";avl.textContent="❌ General Avoid Rules";f.appendChild(avl);
+    activeMuh.avoid.forEach(a=>{
+      const ac=document.createElement("div");ac.className="avoid-card";
+      ac.innerHTML=`<div style="font-weight:bold;color:#991b1b;font-size:12px;">${a.date}</div><div style="color:#6b7280;font-size:11px;margin-top:2px;">${a.reason}</div>`;
+      f.appendChild(ac);
+    });
+  }
+
+  // Panchang info
+  const pi=document.createElement("div");
+  pi.style.cssText="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:14px;padding:16px;margin-top:8px;margin-bottom:12px;";
+  pi.innerHTML=`<div style="color:#a5b4fc;font-weight:bold;font-size:12px;margin-bottom:10px;">📜 What Makes a Date Shubh?</div>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;gap:10px;"><span style="font-size:18px;flex-shrink:0;">🌙</span><div><div style="color:#e0e7ff;font-weight:bold;font-size:11px;">Tithi (Lunar Day)</div><div style="color:#a5b4fc;font-size:10px;margin-top:2px;line-height:1.5;">Position of Moon relative to Sun. Shukla Paksha tithis are generally preferred.</div></div></div>
+    <div style="display:flex;gap:10px;"><span style="font-size:18px;flex-shrink:0;">⭐</span><div><div style="color:#e0e7ff;font-weight:bold;font-size:11px;">Nakshatra (Constellation)</div><div style="color:#a5b4fc;font-size:10px;margin-top:2px;line-height:1.5;">Lunar mansion the Moon occupies. For marriage: Rohini, Hasta, Swati, Uttara Phalguni are ideal.</div></div></div>
+    <div style="display:flex;gap:10px;"><span style="font-size:18px;flex-shrink:0;">↑</span><div><div style="color:#e0e7ff;font-weight:bold;font-size:11px;">Lagna (Rising Sign)</div><div style="color:#a5b4fc;font-size:10px;margin-top:2px;line-height:1.5;">The zodiac sign rising on the eastern horizon. A strong, unafflicted Lagna is essential.</div></div></div>
+    <div style="display:flex;gap:10px;"><span style="font-size:18px;flex-shrink:0;">🪐</span><div><div style="color:#e0e7ff;font-weight:bold;font-size:11px;">Planetary Positions</div><div style="color:#a5b4fc;font-size:10px;margin-top:2px;line-height:1.5;">Jupiter (Guru) should be strong and well-placed. Avoid Rahu Kalam and malefic periods.</div></div></div>
+  </div>`;
+  f.appendChild(pi);
+  return f;
+}
+
+function makeSelect(label, opts, val, onChange, color, cls){
+  const wrap=document.createElement("div");
+  wrap.innerHTML=`<label style="font-size:10px;color:${color};display:block;margin-bottom:3px;">${label}</label>`;
+  const sel=document.createElement("select");sel.className=cls;
+  const defOpt=document.createElement("option");defOpt.value="";defOpt.textContent="— select —";sel.appendChild(defOpt);
+  opts.forEach(o=>{const opt=document.createElement("option");opt.value=o;opt.textContent=o;if(o===val)opt.selected=true;sel.appendChild(opt);});
+  sel.onchange=e=>onChange(e.target.value);
+  wrap.appendChild(sel);return wrap;
+}
+
+// ═══════════════════════════════════════════════════════
+// SAVED & SETTINGS
+// ═══════════════════════════════════════════════════════
+function renderSaved(){
+  const f=document.createDocumentFragment();
+  const wrap=document.createElement("div");wrap.style.cssText="text-align:center;padding:40px 20px;";
+  wrap.innerHTML=`<div style="font-size:50px;">🔖</div><div style="color:#7c2d12;font-weight:bold;font-size:16px;margin-top:10px;">Saved Pujas</div><div style="color:#92400e;font-size:12px;margin-top:6px;margin-bottom:20px;">Your saved checklists will appear here</div><div style="background:#fff;border-radius:14px;padding:16px;border:1px solid #fed7aa;text-align:left;"><div style="font-weight:bold;color:#7c2d12;font-size:13px;margin-bottom:10px;">🚀 Coming in Next Update</div>${["Save & resume your puja checklists","Sync across devices","Share with family members","Add custom notes to each item"].map((f,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:${i<3?"1px solid #fef3c7":"none"};"><span style="color:#c2410c;font-size:12px;">◦</span><span style="font-size:12px;color:#374151;">${f}</span></div>`).join("")}</div>`;
+  f.appendChild(wrap);return f;
+}
+
+function renderSettings(){
+  const f=document.createDocumentFragment();
+  const hdr=document.createElement("div");
+  hdr.style.cssText="background:linear-gradient(135deg,#374151,#4b5563);border-radius:20px;padding:18px;text-align:center;margin-bottom:16px;";
+  hdr.innerHTML=`<div style="font-size:36px;margin-bottom:4px;">⚙️</div><div style="color:#fff;font-size:18px;font-weight:bold;">Settings</div><div style="color:#d1d5db;font-size:12px;">Customize your PujaPath experience</div>`;
+  f.appendChild(hdr);
+  [{icon:"🗺️",title:"Default Region",desc:"Set your home region for festivals",action:"All India"},{icon:"🌐",title:"Language",desc:"Preferred language for items",action:"English"},{icon:"🔔",title:"Reminders",desc:"Get festival & puja reminders",action:"Coming soon"},{icon:"🌙",title:"Dark Mode",desc:"Easy on the eyes at night",action:"Coming soon"}].forEach(s=>{
+    const card=document.createElement("div");card.style.cssText="background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid #e5e7eb;display:flex;align-items:center;gap:12px;";
+    card.innerHTML=`<span style="font-size:24px;">${s.icon}</span><div style="flex:1;"><div style="font-weight:bold;color:#374151;font-size:13px;">${s.title}</div><div style="color:#6b7280;font-size:11px;margin-top:1px;">${s.desc}</div></div><span style="font-size:11px;color:#9ca3af;font-style:italic;">${s.action} ›</span>`;
+    f.appendChild(card);
+  });
+  const ver=document.createElement("div");ver.style.cssText="text-align:center;margin-top:16px;color:#9ca3af;font-size:11px;";ver.textContent="PujaPath v2.0 · Made with 🙏";f.appendChild(ver);
+  return f;
+}
+
+// ═══════════════════════════════════════════════════════
+// SHARE
+// ═══════════════════════════════════════════════════════
+function openShare(){
+  const p=S.selPuja;if(!p)return;
+  const mand=p.items.filter(i=>i.mandatory),opt=p.items.filter(i=>!i.mandatory);
+  const hM=mand.filter(i=>S.checked[i.name]),hO=opt.filter(i=>S.checked[i.name]);
+  const nM=mand.filter(i=>!S.checked[i.name]),nO=opt.filter(i=>!S.checked[i.name]);
+  let t=`🙏 ${p.name} — Samagri Checklist\n${"─".repeat(30)}\n✅ HAVE (${hM.length+hO.length}):\n`;
+  [...hM,...hO].forEach(i=>{t+=`  ${i.emoji} ${i.name}${i.mandatory?" [★ MUST]":""}\n`;});
+  t+=`\n❌ NEED (${nM.length+nO.length}):\n`;
+  [...nM,...nO].forEach(i=>{t+=`  ${i.emoji} ${i.name}${i.mandatory?" ⚠️ MUST":""}\n`;});
+  t+=`${"─".repeat(30)}\n★ Mandatory: ${hM.length}/${mand.length} ready\n🙏 PujaPath`;
+  document.getElementById("share-text").value=t;
+  document.getElementById("modal-backdrop").classList.add("show");
+  if(navigator.share)navigator.share({title:`${p.name} Checklist`,text:t}).catch(()=>{});
+}
+function closeModal(){document.getElementById("modal-backdrop").classList.remove("show");}
+function doCopy(){
+  const txt=document.getElementById("share-text").value;
+  const lbl=document.getElementById("copy-label");
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>{lbl.textContent="✅ Copied!";setTimeout(()=>lbl.textContent="Copy Text",2000);}).catch(()=>{lbl.textContent="✅ Copied!";setTimeout(()=>lbl.textContent="Copy Text",2000);});}
+  else{lbl.textContent="✅ Copied!";setTimeout(()=>lbl.textContent="Copy Text",2000);}
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function switchTab(tab){
+  S.tab=tab;S.screen="home";S.selPuja=null;S.showMust=false;
+  render();
+}
+function goBack(){
+  if(S.screen==="steps")S.screen="puja";
+  else{S.screen="home";S.selPuja=null;S.showMust=false;}
+  render();
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
